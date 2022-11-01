@@ -16,10 +16,19 @@ class Board {
 
   calculateNext() {
     if (!this.laser) return;
+    if (isInBounds(this.laser.tail, this.grid)) {
+      const direction = getDirection(this.laser.tail.prev, this.laser.tail);
+      const next = this.laser.createNode();
+      return true;
+    }
   }
 }
 
-const checkInBounds = (coords, board) => {
+const getDirection = (prev, curr) => {
+  return [curr[0] - prev[0], curr[1] - prev[1]];
+};
+
+const isInBounds = (coords, board) => {
   const checkX = coords[1] > -1 && coords[1] <= board.length;
   const checkY = coords[0] > -1 && coords[0] <= board[0].length;
 
