@@ -1,0 +1,19 @@
+body {
+  /* background: blue; */
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.cell {
+  background: red;
+  height: 50px;
+  width: 50px;
+  border: 1px solid black;
+}
+
+.cell.blue {
+  background: blue;
+}
