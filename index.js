@@ -4,7 +4,7 @@ class Board {
     this.laser = null;
   }
 
-  initLasers() {
+  initLaser() {
     this.grid.forEach(row =>
       row.forEach(cell =>
         cell.type === 'generator'
@@ -12,14 +12,19 @@ class Board {
           : null
       )
     );
+
+    this.laser;
   }
 
   calculateNext() {
-    if (!this.laser) return;
-    if (isInBounds(this.laser.tail, this.grid)) {
-      const direction = getDirection(this.laser.tail.prev, this.laser.tail);
-      const next = this.laser.createNode();
+    if (!this.laser) return false;
+
+    const { x, y } = this.laser.tail;
+    if (isInBounds([x + 1, y], this.grid)) {
+      const next = this.laser.createNode(x + 1, y);
       return true;
+    } else {
+      this.laser.end();
     }
   }
 }
@@ -44,6 +49,10 @@ class LinkedList {
   createNode = (x, y) => {
     const node = new LinkedListNode(x, y, this.tail);
     this.nodes.push(node);
+  };
+
+  end = () => {
+    this.nodes.push(null);
   };
 }
 
@@ -132,9 +141,9 @@ const generateRows = rows => {
 };
 
 const board = new Board(grid);
+board.initLaser();
+board.calculateNext();
 generateRows(board.grid);
 
-board.initLasers();
-console.log('b', board.lasers);
-
+console.log('b', board.laser);
 //
