@@ -1,13 +1,30 @@
 class Board {
   constructor(grid) {
     this.grid = grid;
-    this.lasers = [];
+    this.laser = null;
   }
 
-  // lasers
-  // activeTargets
-  // targetTargets
+  initLasers() {
+    this.grid.forEach(row =>
+      row.forEach(cell =>
+        cell.type === 'generator'
+          ? (this.laser = new LinkedList([cell.x, cell.y]))
+          : null
+      )
+    );
+  }
+
+  calculateNext() {
+    if (!this.laser) return;
+  }
 }
+
+const checkInBounds = (coords, board) => {
+  const checkX = coords[1] > -1 && coords[1] <= board.length;
+  const checkY = coords[0] > -1 && coords[0] <= board[0].length;
+
+  return checkX && checkY;
+};
 
 class LinkedList {
   constructor(head) {
@@ -71,8 +88,8 @@ const t1 = target([1, 0], 0);
 
 const grid = [
   [g1, 0, 0],
-  [t1, 0, 0],
   [0, 0, 0],
+  [t1, 0, 0],
 ];
 
 // DOM STUFF
@@ -107,5 +124,8 @@ const generateRows = rows => {
 
 const board = new Board(grid);
 generateRows(board.grid);
+
+board.initLasers();
+console.log('b', board.lasers);
 
 //
