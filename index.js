@@ -101,27 +101,33 @@ class Board {
         }
       case 'beam-splitter':
       case 'double-mirror':
+        let reflectionMask;
         if (!(rotation % 2)) {
-          // N/S
+          // N/S - Clockwise
           //  '\'
           if (directionMask[0]) {
-            // [1, 0] / [-1, 0]
-            // N -> E / S -> W
+            // [1, 0] -> [0, 1] / [-1, 0] -> [0, -1]
+            // S -> E / N -> W
+            reflectionMask = [0, directionMask[0]];
           } else {
-            // [0, 1] / [0, -1]
-            // E -> N / W -> S
+            // [0, 1] -> [1, 0] / [0, -1] -> [-1, 0]
+            // E -> S / W -> N
+            reflectionMask = [directionMask[1], 0];
           }
         } else {
-          // E/W
+          // E/W - Counter-clockwise
           //  '/'
           if (directionMask[0]) {
-            // [1, 0] / [-1, 0]
-            // N -> W / S -> E
+            // [1, 0] -> [0, -1] / [-1, 0] -> [0, 1]
+            // S -> W / N -> E
+            reflectionMask = [0, -directionMask[0]];
           } else {
-            // [0, 1] / [0, -1]
-            // W -> N / E -> S
+            // [0, 1] -> [-1, 0] / [0, -1] -> [1, 0]
+            // E -> N / W -> S
+            reflectionMask = [-directionMask[1], 0];
           }
         }
+        return applyMask(coords, reflectionMask);
       case 'cell-blocker':
         return null;
     }
@@ -340,5 +346,62 @@ const grid7 = [
   [0, t(), 0],
 ];
 
+// double-mirror //
 const t7 = testBoard(grid7);
 badTest(7, t7.points, 1);
+
+const grid8 = [
+  [l(1), 0, m(0)],
+  [0, 0, 0],
+  [0, 0, t()],
+];
+
+const t8 = testBoard(grid8);
+badTest(8, t8.points, 1);
+
+const grid9 = [
+  [t(), 0, m(0)],
+  [0, 0, 0],
+  [0, 0, l()],
+];
+
+const t9 = testBoard(grid9);
+badTest(9, t9.points, 1);
+
+const grid10 = [
+  [m(1), 0, t()],
+  [0, 0, 0],
+  [l(0), 0, 0],
+];
+
+const t10 = testBoard(grid10);
+badTest(10, t10.points, 1);
+
+const grid11 = [
+  [m(1), 0, l(3)],
+  [0, 0, 0],
+  [t(), 0, 0],
+];
+
+const t11 = testBoard(grid11);
+badTest(11, t11.points, 1);
+
+const grid12 = [
+  [0, 0, 0, 0, 0],
+  [0, m(1), 0, l(3), 0],
+  [0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0],
+  [0, t(), 0, 0, 0],
+];
+
+const t12 = testBoard(grid12);
+badTest(12, t12.points, 1);
+
+const grid13 = [
+  [0, m(1), 0, 0, m(0)],
+  [0, 0, 0, 0, 0],
+  [0, m(0), 0, l(3), 0],
+  [0, m(1), 0, 0, m(1)],
+  [0, t(), 0, 0, 0],
+];
+const t13 = testBoard(grid13);
