@@ -56,6 +56,8 @@ class Board {
     } else {
       this.laser.append(null);
     }
+
+    this.calculateAll();
   }
 
   printLaser(verbose = false) {
@@ -129,7 +131,7 @@ class Board {
         }
         return applyMask(coords, reflectionMask);
       case 'cell-blocker':
-        return null;
+        return applyMask(coords, directionMask);
     }
 
     return;
@@ -151,11 +153,6 @@ class Board {
 
     // 3) mark as visited
     cellContents && (cellContents.visited = true);
-
-    // switch (this.laser.tail) {
-    //   case 'a':
-    //     return true;
-    // }
 
     if (isInBounds(nextCoords, this.grid)) {
       const next = this.laser.append(nextCoords);
@@ -282,7 +279,6 @@ const badTest = (label, test, expectation) => {
 const testBoard = grid => {
   const board = new Board(grid);
   board.initLaser();
-  board.calculateAll();
   render(board);
   return board;
 };
@@ -405,3 +401,15 @@ const grid13 = [
   [0, t(), 0, 0, 0],
 ];
 const t13 = testBoard(grid13);
+
+// cell-blocker //
+const grid14 = [
+  [0, m(1), 0, 0, m(0)],
+  [0, x(), 0, 0, 0],
+  [0, m(0), 0, l(3), 0],
+  [0, m(1), 0, 0, m(1)],
+  [0, t(), 0, 0, 0],
+];
+
+const t14 = testBoard(grid14);
+badTest(14, t14.points, 1);

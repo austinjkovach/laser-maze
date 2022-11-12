@@ -46,8 +46,6 @@ body {
 
 .token-cell-blocker:before {
   content: 'x';
-  color: white;
-  background: black;
 }
 
 .border {
