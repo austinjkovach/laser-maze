@@ -14,13 +14,41 @@ body {
   border: 1px solid black;
 }
 
-.blue {
-  background: blue;
+.cell:before {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100%;
+  width: 100%;
 }
 
-.red {
-  background: red;
+.token-laser:before {
+  content: '▶️';
 }
-.green {
-  background: green;
+
+.token-target:before {
+  content: '🎯';
+}
+
+.token-checkpoint:before {
+  content: '⛩️';
+  background: yellow;
+}
+
+.token-beam-splitter:before {
+  content: 'b';
+}
+
+.token-double-mirror:before {
+  content: '🪞';
+}
+
+.token-cell-blocker:before {
+  content: '🚧';
+}
+
+.border {
+  border: 1px solid red;
+  background: rgba(255, 0, 0, 0.1);
 }
