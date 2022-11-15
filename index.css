@@ -24,15 +24,15 @@ body {
 }
 
 .token-laser:before {
-  content: 'L';
+  content: '▶️';
 }
 
 .token-target:before {
-  content: 'T';
+  content: '🎯';
 }
 
 .token-checkpoint:before {
-  content: 'C';
+  content: '⛩️';
   background: yellow;
 }
 
@@ -41,11 +41,11 @@ body {
 }
 
 .token-double-mirror:before {
-  content: 'm';
+  content: '🪞';
 }
 
 .token-cell-blocker:before {
-  content: 'x';
+  content: '🚧';
 }
 
 .border {

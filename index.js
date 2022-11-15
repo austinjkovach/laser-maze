@@ -19,7 +19,7 @@ const token = (type, rotation = 0) => {
   return {
     type,
     rotation,
-    visited: false,
+    visited: type === 'cell-blocker', // cell-blockers do not need to be visited in order for a solution to be valid
   };
 };
 
@@ -61,14 +61,17 @@ class Board {
   }
 
   printLaser(verbose = false) {
-    let curr = this.laser.head;
-    while (curr) {
+    // let curr = this.laser.head;
+    let queue = [this.laser.head];
+
+    while (queue.length > 0) {
+      curr = queue.pop();
       if (verbose) {
         console.log(curr);
       } else {
         console.log(curr.coords);
       }
-      curr = curr.next;
+      queue.push(curr.next);
     }
   }
 
@@ -78,6 +81,8 @@ class Board {
     }
     // this.printLaser();
   }
+
+  allTokensAreVisited = () => this.tokens.every(t => t.visited);
 
   getNextCoords = (coords, directionMask, token) => {
     if (!token) {
@@ -102,6 +107,16 @@ class Board {
           return applyMask(coords, directionMask);
         }
       case 'beam-splitter':
+      // /
+      // R -> R U
+      // U -> R U
+      // L -> L D
+      // D -> L D
+      // \
+      // R -> R D
+      // D -> R D
+      // L -> L U
+      // U -> L U
       case 'double-mirror':
         let reflectionMask;
         if (!(rotation % 2)) {
@@ -257,7 +272,6 @@ const addBorderToCell = coords => {
 };
 
 const render = board => {
-  // TODO empty #board before running new test
   $board.innerHTML = '';
   generateRows(board.grid);
 
@@ -273,6 +287,8 @@ const render = board => {
 const badTest = (label, test, expectation) => {
   console.log('Test', label);
   console.log('Expect', test, 'to be:', expectation);
+  if (test !== expectation)
+    console.error('Test Failed: expect', test, 'to be', expectation);
   console.log('\n\n');
 };
 
@@ -413,3 +429,27 @@ const grid14 = [
 
 const t14 = testBoard(grid14);
 badTest(14, t14.points, 1);
+badTest(14, t14.tokens.length, 8);
+badTest(14, t14.allTokensAreVisited(), true);
+
+const grid15 = [
+  [m(0), 0, 0, 0, 0],
+  [0, 0, 0, 0, 0],
+  [0, t(), 0, l(3), 0],
+  [0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0],
+];
+
+const t15 = testBoard(grid15);
+badTest(15, t15.allTokensAreVisited(), false);
+
+const grid16 = [
+  [x(), 0, 0, 0, 0],
+  [0, 0, 0, 0, 0],
+  [0, t(), 0, l(3), 0],
+  [0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0],
+];
+
+const t16 = testBoard(grid16);
+badTest(16, t16.allTokensAreVisited(), true);
