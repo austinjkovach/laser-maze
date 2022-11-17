@@ -44,15 +44,15 @@ class Board {
       row.forEach((cell, j) => {
         if (cell.type !== 'laser') return null;
         cell.visited = true;
-        this.laser = new LinkedList([j, i]);
+        this.laser = new Tree([j, i]);
         directionMask = rotationMatrix[cell.rotation];
       })
     );
     const { coords } = this.laser.tail;
-    const next = applyMask(coords, directionMask);
+    const nextCoords = applyMask(coords, directionMask);
 
-    if (isInBounds(next, this.grid)) {
-      this.laser.append(next);
+    if (isInBounds(nextCoords, this.grid)) {
+      this.laser.append(nextCoords);
     } else {
       this.laser.append(null);
     }
@@ -61,7 +61,7 @@ class Board {
   }
 
   printLaser(verbose = false) {
-    // let curr = this.laser.head;
+    let curr;
     let queue = [this.laser.head];
 
     while (queue.length > 0) {
@@ -71,15 +71,47 @@ class Board {
       } else {
         console.log(curr.coords);
       }
-      queue.push(curr.next);
+      queue.push(curr.children);
     }
   }
 
   calculateAll() {
-    while (this.laser.tail.coords) {
-      this.processNode(this.laser.tail);
+    let queue = [this.laser.tail];
+    let curr;
+    while (queue.length > 0) {
+      curr = queue.pop();
+
+      this.processNode(curr);
+      if (curr.children) {
+        queue.push(curr.children);
+      }
     }
     // this.printLaser();
+  }
+
+  processNode(node) {
+    if (!this.laser || !node) return false;
+    const { coords, prev } = node;
+    if (coords === null) return false;
+    const [x, y] = coords;
+
+    // 1) get laser direction
+    const directionMask = getDirectionMask(prev.coords, coords);
+    // 2) calculate next based on laser direction, token type, and token rotation
+    const cellContents = this.grid[y][x];
+    //-- if(!cellContents)
+    const nextCoords = this.getNextCoords(coords, directionMask, cellContents);
+
+    // 3) mark as visited
+    cellContents && (cellContents.visited = true);
+
+    if (isInBounds(nextCoords, this.grid)) {
+      const next = this.laser.append(nextCoords);
+      return true;
+    } else {
+      this.laser.append(null);
+      return true;
+    }
   }
 
   allTokensAreVisited = () => this.tokens.every(t => t.visited);
@@ -151,31 +183,6 @@ class Board {
 
     return;
   };
-
-  // Switch on different token types in here
-  processNode(node) {
-    if (!this.laser) return false;
-    const { coords, prev } = node;
-    if (coords === null) return false;
-    const [x, y] = coords;
-
-    // 1) get laser direction
-    const directionMask = getDirectionMask(prev.coords, coords);
-    // 2) calculate next based on laser direction, token type, and token rotation
-    const cellContents = this.grid[y][x];
-    //-- if(!cellContents)
-    const nextCoords = this.getNextCoords(coords, directionMask, cellContents);
-
-    // 3) mark as visited
-    cellContents && (cellContents.visited = true);
-
-    if (isInBounds(nextCoords, this.grid)) {
-      const next = this.laser.append(nextCoords);
-      return true;
-    } else {
-      this.laser.append(null);
-    }
-  }
 }
 
 const getDirectionMask = (prev, curr) => {
@@ -195,23 +202,23 @@ const isInBounds = (coords, board) => {
   return checkX && checkY;
 };
 
-class LinkedList {
+class Tree {
   constructor(coords) {
-    this.head = new LinkedListNode(coords);
+    this.head = new TreeNode(coords);
     this.tail = this.head;
   }
 
   append = coords => {
-    const node = new LinkedListNode(coords, this.tail);
-    this.tail.next = node;
+    const node = new TreeNode(coords, this.tail);
+    this.tail.children = node;
     this.tail = node;
   };
 }
 
-class LinkedListNode {
-  constructor(coords, prev = null, next = null) {
+class TreeNode {
+  constructor(coords, prev = null, children = null) {
     this.coords = coords;
     this.prev = prev;
-    this.next = next;
+    this.children = children;
   }
 }

@@ -56,9 +56,13 @@ const render = board => {
   $board.innerHTML = '';
   generateRows(board.grid);
 
-  let curr = board.laser.head;
-  while (curr) {
-    addBorderToCell(curr.coords);
-    curr = curr.next;
+  let curr;
+  let queue = [board.laser.head];
+  while (queue.length) {
+    curr = queue.pop();
+    if (curr) {
+      addBorderToCell(curr.coords);
+      queue.push(curr.children);
+    }
   }
 };
