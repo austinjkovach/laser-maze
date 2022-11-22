@@ -44,7 +44,7 @@ const generateRows = rows => {
 };
 
 const addBorderToCell = coords => {
-  if (coords === null) return;
+  if (!coords) return;
   const [x, y] = coords;
   const targetCell = document.querySelector(
     `.row:nth-of-type(${y + 1}) .cell:nth-of-type(${x + 1})`
@@ -60,9 +60,9 @@ const render = board => {
   let queue = [board.laser.head];
   while (queue.length) {
     curr = queue.pop();
-    if (curr) {
+    if (curr && curr.coords) {
       addBorderToCell(curr.coords);
-      queue.push(curr.children);
+      queue.push(...curr.children);
     }
   }
 };

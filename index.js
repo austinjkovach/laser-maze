@@ -10,7 +10,7 @@ const rotationMatrix = [
   target
 
   {
-    type: 'target' | 'laser' | 'checkpoint';
+    type: 'target' | 'laser' | 'checkpoint' | 'beam-splitter' | 'double-mirror' | 'cell-blocker';
     rotation: 0 | 1 | 2 | 3;
     visited: true | false
   }
@@ -44,20 +44,12 @@ class Board {
       row.forEach((cell, j) => {
         if (cell.type !== 'laser') return null;
         cell.visited = true;
-        this.laser = new Tree([j, i]);
+        this.laser = new Tree([j, i], rotationMatrix[cell.rotation]);
         directionMask = rotationMatrix[cell.rotation];
       })
     );
-    const { coords } = this.laser.tail;
-    const nextCoords = applyMask(coords, directionMask);
 
-    if (isInBounds(nextCoords, this.grid)) {
-      this.laser.append(nextCoords);
-    } else {
-      this.laser.append(null);
-    }
-
-    this.calculateAll();
+    this.calculateAll(this.laser);
   }
 
   printLaser(verbose = false) {
@@ -66,64 +58,92 @@ class Board {
 
     while (queue.length > 0) {
       curr = queue.pop();
+
       if (verbose) {
         console.log(curr);
       } else {
         console.log(curr.coords);
       }
-      queue.push(curr.children);
+      queue.push(...curr.children);
     }
   }
 
-  calculateAll() {
-    let queue = [this.laser.tail];
+  calculateAll(laser) {
+    // BFS
+    let queue = [laser.head];
     let curr;
     while (queue.length > 0) {
       curr = queue.pop();
 
       this.processNode(curr);
-      if (curr.children) {
-        queue.push(curr.children);
-      }
+      queue.push(...curr.children);
+      // console.log(
+      //   'queue',
+      //   queue.slice().map(q => q.coords),
+      //   '\n\n'
+      // );
     }
     // this.printLaser();
   }
 
-  processNode(node) {
-    if (!this.laser || !node) return false;
-    const { coords, prev } = node;
-    if (coords === null) return false;
+  markAsVisited(coords) {
     const [x, y] = coords;
-
-    // 1) get laser direction
-    const directionMask = getDirectionMask(prev.coords, coords);
-    // 2) calculate next based on laser direction, token type, and token rotation
     const cellContents = this.grid[y][x];
-    //-- if(!cellContents)
-    const nextCoords = this.getNextCoords(coords, directionMask, cellContents);
-
-    // 3) mark as visited
-    cellContents && (cellContents.visited = true);
-
-    if (isInBounds(nextCoords, this.grid)) {
-      const next = this.laser.append(nextCoords);
-      return true;
-    } else {
-      this.laser.append(null);
+    if (cellContents) {
+      cellContents.visited = true;
       return true;
     }
+    return false;
+  }
+
+  processNode(node) {
+    // 1) get laser direction
+    // 2) calculate next based on laser direction, token type, and token rotation
+    // 3) mark as visited
+    if (!this.laser || !node || !node.coords) return false;
+    const { coords, prev } = node;
+    const [x, y] = coords;
+    // If we aren't currently inbounds, return;
+    if (!isInBounds(coords, this.grid)) return;
+
+    // If we don't have a previous, calculate next based on the laser's rotation
+    if (prev === null) {
+      this.laser.append([applyMask(coords, this.laser.rotationMask)], node);
+      this.markAsVisited(coords);
+      return;
+    }
+
+    const directionMask = getDirectionMask(prev.coords, coords);
+    const cellContents = this.grid[y][x];
+    const nextCoords = this.getNextCoords(coords, directionMask, cellContents);
+
+    this.markAsVisited(coords);
+
+    // TODO append any coords that are in bounds, rather than blanket rejecting if ANY are out of bounds
+    if (!nextCoords) return;
+    nextCoords.forEach(nC => {
+      if (isInBounds(nC, this.grid)) {
+        this.laser.append(nextCoords, node);
+        return;
+      }
+      this.laser.append(null, node);
+      return false;
+    });
   }
 
   allTokensAreVisited = () => this.tokens.every(t => t.visited);
 
   getNextCoords = (coords, directionMask, token) => {
     if (!token) {
-      return applyMask(coords, directionMask);
+      return [applyMask(coords, directionMask)];
     }
 
     const { rotation, type } = token;
 
+    let beamSplitter = [];
     switch (type) {
+      case 'laser':
+        return [applyMask(coords, directionMask)];
       case 'target':
         // TODO only give points if facing the correct direction
         this.points += 1;
@@ -132,23 +152,14 @@ class Board {
         // Based on rotation // 0, 2 == N/S, 1, 3 == E/W
         if (!(rotation % 2)) {
           // N/S if (mask[0]) return null;
-          return applyMask(coords, directionMask);
+          return [applyMask(coords, directionMask)];
         } else {
           // E/W
           if (directionMask[1]) return null;
-          return applyMask(coords, directionMask);
+          return [applyMask(coords, directionMask)];
         }
       case 'beam-splitter':
-      // /
-      // R -> R U
-      // U -> R U
-      // L -> L D
-      // D -> L D
-      // \
-      // R -> R D
-      // D -> R D
-      // L -> L U
-      // U -> L U
+        beamSplitter = [applyMask(coords, directionMask)];
       case 'double-mirror':
         let reflectionMask;
         if (!(rotation % 2)) {
@@ -176,12 +187,13 @@ class Board {
             reflectionMask = [-directionMask[1], 0];
           }
         }
-        return applyMask(coords, reflectionMask);
+        const doubleMirror = [applyMask(coords, reflectionMask)];
+        return beamSplitter ? doubleMirror.concat(beamSplitter) : doubleMirror;
       case 'cell-blocker':
-        return applyMask(coords, directionMask);
+        return [applyMask(coords, directionMask)];
     }
 
-    return;
+    return [];
   };
 }
 
@@ -203,20 +215,29 @@ const isInBounds = (coords, board) => {
 };
 
 class Tree {
-  constructor(coords) {
+  constructor(coords, rotationMask) {
     this.head = new TreeNode(coords);
-    this.tail = this.head;
+    this.rotationMask = rotationMask;
   }
 
-  append = coords => {
-    const node = new TreeNode(coords, this.tail);
-    this.tail.children = node;
-    this.tail = node;
+  append = (coords, curr = null) => {
+    let newChildren = [];
+    if (coords === null) {
+      const node = new TreeNode(null, curr);
+      node.children = [node];
+
+      return;
+    }
+    coords.forEach((c, i) => {
+      const node = new TreeNode(c, curr);
+      newChildren.push(node);
+    });
+    if (curr) curr.children = newChildren;
   };
 }
 
 class TreeNode {
-  constructor(coords, prev = null, children = null) {
+  constructor(coords, prev = null, children = []) {
     this.coords = coords;
     this.prev = prev;
     this.children = children;
