@@ -1,9 +1,9 @@
 const badTest = (label, test, expectation) => {
-  console.log('Test', label);
-  console.log('Expect', test, 'to be:', expectation);
-  if (test !== expectation)
-    console.error('Test Failed: expect', test, 'to be', expectation);
-  console.log('\n\n');
+  if (test !== expectation) {
+    console.error(`Test ${label} Failed: Expect ${test} to be ${expectation}`);
+    return;
+  }
+  console.log(`Test ${label} - Expect ${test} to be ${expectation}`);
 };
 
 const testBoard = grid => {
@@ -72,7 +72,9 @@ const grid7 = [
   [0, t(), 0],
 ];
 
+///////////////////
 // double-mirror //
+///////////////////
 const t7 = testBoard(grid7);
 badTest(7, t7.points, 1);
 
@@ -132,7 +134,9 @@ const grid13 = [
 ];
 const t13 = testBoard(grid13);
 
+//////////////////
 // cell-blocker //
+//////////////////
 const grid14 = [
   [0, m(1), 0, 0, m(0)],
   [0, x(), 0, 0, 0],
@@ -168,7 +172,9 @@ const grid16 = [
 const t16 = testBoard(grid16);
 badTest(16, t16.allTokensAreVisited(), true);
 
-// beam splitter
+////////////////////
+// beam splitter  //
+////////////////////
 const grid17 = [
   [0, 0, t(), 0, 0],
   [0, 0, 0, 0, 0],
@@ -192,3 +198,15 @@ const grid18 = [
 const t18 = testBoard(grid18);
 badTest(18, t18.allTokensAreVisited(), true);
 badTest(18, t18.points, 2);
+
+const grid19 = [
+  [m(1), 0, c(1), 0, m(0)],
+  [b(), 0, 0, m(), 0],
+  [b(), b(), t(), 0, x()],
+  [0, t(), 0, t(), 0],
+  [t(), 0, 0, 0, l(0)],
+];
+
+const t19 = testBoard(grid19);
+badTest(19, t19.allTokensAreVisited(), true);
+badTest(19, t19.points, 4);

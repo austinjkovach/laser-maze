@@ -4,27 +4,12 @@ const generateCellsInRow = row => {
     const $cell = document.createElement('div');
     $cell.classList.add('cell');
 
-    if (c.type === 'laser') {
-      $cell.classList.add('token-laser');
-    }
-
-    if (c.type === 'target') {
-      $cell.classList.add('token-target');
-    }
-
-    if (c.type === 'checkpoint') {
-      $cell.classList.add('token-checkpoint');
-    }
-
-    if (c.type === 'beam-splitter') {
-      $cell.classList.add('token-beam-splitter');
-    }
-    if (c.type === 'double-mirror') {
-      $cell.classList.add('token-double-mirror');
-    }
-    if (c.type === 'cell-blocker') {
-      $cell.classList.add('token-cell-blocker');
-    }
+    if (c.type === 'laser') $cell.classList.add('token-laser');
+    if (c.type === 'target') $cell.classList.add('token-target');
+    if (c.type === 'checkpoint') $cell.classList.add('token-checkpoint');
+    if (c.type === 'beam-splitter') $cell.classList.add('token-beam-splitter');
+    if (c.type === 'double-mirror') $cell.classList.add('token-double-mirror');
+    if (c.type === 'cell-blocker') $cell.classList.add('token-cell-blocker');
     return $cell;
   });
 };
