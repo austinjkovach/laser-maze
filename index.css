@@ -37,7 +37,7 @@ body {
 }
 
 .token-beam-splitter:before {
-  content: 'b';
+  content: '↔️';
 }
 
 .token-double-mirror:before {
