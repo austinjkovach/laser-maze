@@ -23,6 +23,23 @@ const token = (type, rotation = 0) => {
   };
 };
 
+const getDirectionMask = (prev, curr) => {
+  return [curr[0] - prev[0], curr[1] - prev[1]];
+};
+
+const applyMask = (coords, mask) => {
+  return [mask[0] + coords[0], mask[1] + coords[1]];
+};
+
+const isInBounds = (coords, board) => {
+  if (!coords) return false;
+  const [x, y] = coords;
+  const checkX = x > -1 && x <= board[0].length - 1;
+  const checkY = y > -1 && y <= board.length - 1;
+
+  return checkX && checkY;
+};
+
 const l = rot => token('laser', rot);
 const t = rot => token('target', rot);
 const c = rot => token('checkpoint', rot);
@@ -68,7 +85,7 @@ class Board {
     }
   }
 
-  calculateAll(laser) {
+  calculateAll(laser, print = false) {
     // BFS
     let queue = [laser.head];
     let curr;
@@ -77,13 +94,8 @@ class Board {
 
       this.processNode(curr);
       queue.push(...curr.children);
-      // console.log(
-      //   'queue',
-      //   queue.slice().map(q => q.coords),
-      //   '\n\n'
-      // );
     }
-    // this.printLaser();
+    if (print) this.printLaser();
   }
 
   markAsVisited(coords) {
@@ -96,6 +108,7 @@ class Board {
     return false;
   }
 
+  // TODO START HERE clean this up / make more readable
   processNode(node) {
     // 1) get laser direction
     // 2) calculate next based on laser direction, token type, and token rotation
@@ -119,7 +132,6 @@ class Board {
 
     this.markAsVisited(coords);
 
-    // TODO append any coords that are in bounds, rather than blanket rejecting if ANY are out of bounds
     if (!nextCoords) return;
     nextCoords.forEach(nC => {
       if (isInBounds(nC, this.grid)) {
@@ -191,28 +203,11 @@ class Board {
         return beamSplitter ? doubleMirror.concat(beamSplitter) : doubleMirror;
       case 'cell-blocker':
         return [applyMask(coords, directionMask)];
+      default:
+        return [];
     }
-
-    return [];
   };
 }
-
-const getDirectionMask = (prev, curr) => {
-  return [curr[0] - prev[0], curr[1] - prev[1]];
-};
-
-const applyMask = (coords, mask) => {
-  return [mask[0] + coords[0], mask[1] + coords[1]];
-};
-
-const isInBounds = (coords, board) => {
-  if (!coords) return false;
-  const [x, y] = coords;
-  const checkX = x > -1 && x <= board[0].length - 1;
-  const checkY = y > -1 && y <= board.length - 1;
-
-  return checkX && checkY;
-};
 
 class Tree {
   constructor(coords, rotationMask) {
