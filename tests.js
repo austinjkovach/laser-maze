@@ -167,3 +167,28 @@ const grid16 = [
 
 const t16 = testBoard(grid16);
 badTest(16, t16.allTokensAreVisited(), true);
+
+// beam splitter
+const grid17 = [
+  [0, 0, t(), 0, 0],
+  [0, 0, 0, 0, 0],
+  [0, t(), b(), 0, l(3)],
+  [0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0],
+];
+
+const t17 = testBoard(grid17);
+badTest(17, t17.allTokensAreVisited(), true);
+badTest(17, t17.points, 2);
+
+const grid18 = [
+  [0, 0, 0, 0, 0],
+  [0, 0, 0, t(), 0],
+  [0, 0, 0, 0, 0],
+  [t(), 0, 0, b(), l(3)],
+  [0, 0, 0, 0, 0],
+];
+
+const t18 = testBoard(grid18);
+badTest(18, t18.allTokensAreVisited(), true);
+badTest(18, t18.points, 2);
