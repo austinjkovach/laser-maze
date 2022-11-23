@@ -23,29 +23,45 @@ body {
   width: 100%;
 }
 
+[class*='token-']:before {
+  content: '';
+  background-size: cover;
+}
+
 .token-laser:before {
-  content: '▶️';
+  background-image: url('./laser.png');
 }
 
 .token-target:before {
-  content: '🎯';
+  background-image: url('./target.png');
 }
 
 .token-checkpoint:before {
-  content: '⛩️';
-  background: yellow;
+  background-image: url('./checkpoint.png');
 }
 
 .token-beam-splitter:before {
-  content: 'b';
+  content: '↔️';
+  background-image: url('./beam-splitter.png');
 }
 
 .token-double-mirror:before {
   content: '🪞';
+  background-image: url('./double-mirror.png');
 }
 
 .token-cell-blocker:before {
-  content: '🚧';
+  background-image: url('./cell-blocker.png');
+}
+
+.rotate-90 {
+  transform: rotate(90deg);
+}
+.rotate-180 {
+  transform: rotate(180deg);
+}
+.rotate-270 {
+  transform: rotate(270deg);
 }
 
 .border {
