@@ -38,7 +38,7 @@ const addBorderToCell = coords => {
   targetCell && targetCell.classList.add('border');
 };
 
-const render = board => {
+const render = async board => {
   $board.innerHTML = '';
   generateRows(board.grid);
 
@@ -51,6 +51,7 @@ const render = board => {
         addBorderToCell(curr.coords);
         queue.push(...curr.children);
       }
+      await new Promise(r => setTimeout(r, 100));
     }
   }
 };

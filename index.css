@@ -41,12 +41,10 @@ body {
 }
 
 .token-beam-splitter:before {
-  content: '↔️';
   background-image: url('./beam-splitter.png');
 }
 
 .token-double-mirror:before {
-  content: '🪞';
   background-image: url('./double-mirror.png');
 }
 
@@ -66,5 +64,5 @@ body {
 
 .border {
   border: 1px solid red;
-  background: rgba(255, 0, 0, 0.1);
+  background: rgba(255, 0, 0, 0.2);
 }
