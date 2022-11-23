@@ -1,19 +1,52 @@
+////////////
+// LEVELS //
+////////////
+const levels = [
+  [
+    [0, l(), 0],
+    [0, 0, 0],
+    [0, t(), 0],
+  ],
+  [
+    [0, 0, 0],
+    [0, l(1), 0],
+    [t(0), 0, 0],
+  ],
+  [
+    [0, l(2), 0],
+    [0, 0, 0],
+    [0, t(0), 0],
+  ],
+  [
+    [0, l(2), 0],
+    [0, c(0), 0],
+    [0, t(0), 0],
+  ],
+  [
+    [0, l(2), 0],
+    [0, c(1), 0],
+    [0, t(0), 0],
+  ],
+];
+
 let activeBoard = null;
 const setLevelSelect = () => {
-  let levels = [grid, grid2, grid3, grid4, grid5, grid6];
-
   levels.forEach((level, i) => {
     const $levelBtn = document.createElement('button');
     $levelBtn.textContent = i;
     $levelBtn.addEventListener('click', () => {
       const board = new Board(levels[i]);
       activeBoard = board;
-      render(board);
+      render(activeBoard);
     });
 
     document.querySelector('#levelSelect').appendChild($levelBtn);
   });
 };
+
+/////////////
+// TESTING //
+/////////////
 
 const badTest = (label, test, expectation) => {
   if (test !== expectation) {
@@ -233,9 +266,15 @@ const grid10 = [
 setLevelSelect();
 
 document.querySelector('#initLaser').addEventListener('click', () => {
-  console.log('activeBoard', activeBoard);
   if (activeBoard) {
     activeBoard.initLaser();
+    // TODO START HERE add testing into this
+    // testBoard(activeBoard);
+    // badTest(
+    //   null,
+    //   activeBoard.points,
+    //   activeBoard.tokens.filter(t => t.type === 'target')
+    // );
     render(activeBoard);
   }
 });
