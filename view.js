@@ -46,7 +46,8 @@ const render = async board => {
     let curr;
     let queue = [board.laser.head];
     while (queue.length) {
-      curr = queue.pop();
+      curr = queue[0];
+      queue = queue.slice(1);
       if (curr && curr.coords) {
         addBorderToCell(curr.coords);
         queue.push(...curr.children);

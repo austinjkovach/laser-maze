@@ -90,7 +90,8 @@ class Board {
     let queue = [laser.head];
     let curr;
     while (queue.length > 0) {
-      curr = queue.pop();
+      curr = queue[0];
+      queue = queue.slice(1);
 
       this.processNode(curr);
       queue.push(...curr.children);
