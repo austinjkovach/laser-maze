@@ -10,6 +10,7 @@ const generateCellsInRow = row => {
     if (c.type === 'beam-splitter') $cell.classList.add('token-beam-splitter');
     if (c.type === 'double-mirror') $cell.classList.add('token-double-mirror');
     if (c.type === 'cell-blocker') $cell.classList.add('token-cell-blocker');
+    if (c !== 0) $cell.classList.add(`rotate-${c.rotation * 90}`);
     return $cell;
   });
 };
@@ -41,13 +42,15 @@ const render = board => {
   $board.innerHTML = '';
   generateRows(board.grid);
 
-  let curr;
-  let queue = [board.laser.head];
-  while (queue.length) {
-    curr = queue.pop();
-    if (curr && curr.coords) {
-      addBorderToCell(curr.coords);
-      queue.push(...curr.children);
+  if (board.laser) {
+    let curr;
+    let queue = [board.laser.head];
+    while (queue.length) {
+      curr = queue.pop();
+      if (curr && curr.coords) {
+        addBorderToCell(curr.coords);
+        queue.push(...curr.children);
+      }
     }
   }
 };
