@@ -27,21 +27,123 @@ const levels = [
     [0, c(1), 0],
     [0, t(0), 0],
   ],
+  [
+    [0, 0, 0],
+    [l(1), c(1), 0],
+    [0, t(0), 0],
+  ],
+  [
+    [0, l(2), 0],
+    [0, 0, 0],
+    [0, t(), 0],
+  ],
+  [
+    [l(1), 0, m(0)],
+    [0, 0, 0],
+    [0, 0, t()],
+  ],
+  [
+    [t(), 0, m(0)],
+    [0, 0, 0],
+    [0, 0, l()],
+  ],
+  [
+    [m(1), 0, t()],
+    [0, 0, 0],
+    [l(0), 0, 0],
+  ],
+  [
+    [m(1), 0, l(3)],
+    [0, 0, 0],
+    [t(), 0, 0],
+  ],
+
+  [
+    [0, 0, 0, 0, 0],
+    [0, m(1), 0, l(3), 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, t(), 0, 0, 0],
+  ],
+  [
+    [0, m(1), 0, 0, m(0)],
+    [0, 0, 0, 0, 0],
+    [0, m(0), 0, l(3), 0],
+    [0, m(1), 0, 0, m(1)],
+    [0, t(), 0, 0, 0],
+  ],
+  [
+    [0, m(1), 0, 0, m(0)],
+    [0, x(), 0, 0, 0],
+    [0, m(0), 0, l(3), 0],
+    [0, m(1), 0, 0, m(1)],
+    [0, t(), 0, 0, 0],
+  ],
+  [
+    [m(0), 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, t(), 0, l(3), 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+  ],
+  [
+    [x(), 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, t(), 0, l(3), 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+  ],
+  [
+    [0, 0, t(), 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, t(), b(), 0, l(3)],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+  ],
+  [
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, t(), 0],
+    [0, 0, 0, 0, 0],
+    [t(), 0, 0, b(), l(3)],
+    [0, 0, 0, 0, 0],
+  ],
+  [
+    [m(1), 0, c(1), 0, m(0)],
+    [b(), 0, 0, m(), 0],
+    [b(), b(), t(), 0, x()],
+    [0, t(), 0, t(), 0],
+    [t(), 0, 0, 0, l(0)],
+  ],
+  [
+    [0, 0, 0, t(), 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [t(), 0, 0, b(), l(3)],
+  ],
 ];
 
 let activeBoard = null;
 const setLevelSelect = () => {
   levels.forEach((level, i) => {
     const $levelBtn = document.createElement('button');
-    $levelBtn.textContent = i;
+    $levelBtn.textContent = i + 1;
     $levelBtn.addEventListener('click', () => {
       const board = new Board(levels[i]);
       activeBoard = board;
+      setActiveButton($levelBtn);
       render(activeBoard);
     });
 
     document.querySelector('#levelSelect').appendChild($levelBtn);
   });
+};
+
+const setActiveButton = el => {
+  document
+    .querySelectorAll('#levelSelect button')
+    .forEach($button => $button.classList.remove('active'));
+  el.classList.add('active');
 };
 
 /////////////
