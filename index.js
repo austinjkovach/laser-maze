@@ -15,10 +15,11 @@ const rotationMatrix = [
     visited: true | false
   }
 */
-const token = (type, rotation = 0) => {
+const token = (type, rotation = 0, canRotate = false) => {
   return {
     type,
     rotation,
+    canRotate,
     visited: type === 'cell-blocker', // cell-blockers do not need to be visited in order for a solution to be valid
   };
 };
@@ -40,11 +41,11 @@ const isInBounds = (coords, board) => {
   return checkX && checkY;
 };
 
-const l = rot => token('laser', rot);
-const t = rot => token('target', rot);
-const c = rot => token('checkpoint', rot);
-const b = rot => token('beam-splitter', rot);
-const m = rot => token('double-mirror', rot);
+const l = (rot, canRot = false) => token('laser', rot, canRot);
+const t = (rot, canRot = false) => token('target', rot, canRot);
+const c = (rot, canRot = false) => token('checkpoint', rot, canRot);
+const b = (rot, canRot = false) => token('beam-splitter', rot, canRot);
+const m = (rot, canRot = false) => token('double-mirror', rot, canRot);
 const x = () => token('cell-blocker');
 
 class Board {

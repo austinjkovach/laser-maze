@@ -3,6 +3,15 @@ const generateCellsInRow = row => {
   return row.map(c => {
     const $cell = document.createElement('div');
     $cell.classList.add('cell');
+    $cell.addEventListener('click', () => {
+      $cell.classList.remove(`rotate-${c.rotation * 90}`);
+      c.rotation = (c.rotation + 1) % 4;
+      $cell.classList.add(`rotate-${c.rotation * 90}`);
+
+      // Reset the board when a rotation occurs
+      activeBoard.laser = null;
+      render(activeBoard);
+    });
 
     if (c.type === 'laser') $cell.classList.add('token-laser');
     if (c.type === 'target') $cell.classList.add('token-target');
@@ -11,6 +20,7 @@ const generateCellsInRow = row => {
     if (c.type === 'double-mirror') $cell.classList.add('token-double-mirror');
     if (c.type === 'cell-blocker') $cell.classList.add('token-cell-blocker');
     if (c !== 0) $cell.classList.add(`rotate-${c.rotation * 90}`);
+
     return $cell;
   });
 };
@@ -52,7 +62,11 @@ const render = async board => {
         addBorderToCell(curr.coords);
         queue.push(...curr.children);
       }
-      await new Promise(r => setTimeout(r, 100));
+      // await new Promise(r => setTimeout(r, 100)); // [1]
     }
   }
 };
+
+// [1]
+// sleep() in JavaScript:
+// https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep
