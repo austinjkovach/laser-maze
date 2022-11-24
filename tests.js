@@ -127,15 +127,23 @@ let activeBoard = null;
 const setLevelSelect = () => {
   levels.forEach((level, i) => {
     const $levelBtn = document.createElement('button');
-    $levelBtn.textContent = i;
+    $levelBtn.textContent = i + 1;
     $levelBtn.addEventListener('click', () => {
       const board = new Board(levels[i]);
       activeBoard = board;
+      setActiveButton($levelBtn);
       render(activeBoard);
     });
 
     document.querySelector('#levelSelect').appendChild($levelBtn);
   });
+};
+
+const setActiveButton = el => {
+  document
+    .querySelectorAll('#levelSelect button')
+    .forEach($button => $button.classList.remove('active'));
+  el.classList.add('active');
 };
 
 /////////////

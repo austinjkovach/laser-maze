@@ -49,6 +49,8 @@ const m = (rot, canRot = false) => token('double-mirror', rot, canRot);
 const x = () => token('cell-blocker');
 
 class Board {
+  // TODO should some of these be private to the class?
+  // && Only expose actions through class methods
   constructor(grid) {
     this.grid = grid;
     this.laser = null;
