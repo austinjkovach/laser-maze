@@ -4,6 +4,7 @@ const generateCellsInRow = row => {
     const $cell = document.createElement('div');
     $cell.classList.add('cell');
     $cell.addEventListener('click', () => {
+      if (!c.canRotate) return;
       $cell.classList.remove(`rotate-${c.rotation * 90}`);
       c.rotation = (c.rotation + 1) % 4;
       $cell.classList.add(`rotate-${c.rotation * 90}`);
