@@ -1,13 +1,29 @@
 const $board = document.querySelector('#board');
-const generateCellsInRow = row => {
-  return row.map(c => {
+const generateTokenBank = tokens => {
+  const $tokenBank = document.querySelector('#tokenBank');
+  tokens.forEach(t => {
+    const $token = document.createElement('div');
+    $token.classList.add('cell');
+    if (t.type === 'laser') $token.classList.add('token-laser');
+    if (t.type === 'target') $token.classList.add('token-target');
+    if (t.type === 'checkpoint') $token.classList.add('token-checkpoint');
+    if (t.type === 'beam-splitter') $token.classList.add('token-beam-splitter');
+    if (t.type === 'double-mirror') $token.classList.add('token-double-mirror');
+    if (t.type === 'cell-blocker') $token.classList.add('token-cell-blocker');
+    $tokenBank.appendChild($token);
+  });
+};
+
+const generateCellsInRow = (row, rowIndex) => {
+  return row.map((c, j) => {
     const $cell = document.createElement('div');
+    $cell.setAttribute('coords', `[${j}, ${rowIndex}]`);
     $cell.classList.add('cell');
     $cell.addEventListener('click', () => {
       if (!c.canRotate) return;
       $cell.classList.remove(`rotate-${c.rotation * 90}`);
       c.rotation = (c.rotation + 1) % 4;
-      $cell.classList.add(`rotate-${c.rotation * 90}`);
+      $cell.classListadd(`rotate-${c.rotation * 90}`);
 
       // Reset the board when a rotation occurs
       activeBoard.laser = null;
@@ -27,11 +43,11 @@ const generateCellsInRow = row => {
 };
 
 const generateRows = rows => {
-  rows.forEach(r => {
+  rows.forEach((r, i) => {
     const $row = document.createElement('div');
     $row.classList.add('row');
 
-    const cells = generateCellsInRow(r);
+    const cells = generateCellsInRow(r, i);
     cells.forEach($cell => {
       $row.appendChild($cell);
     });
@@ -52,6 +68,7 @@ const addBorderToCell = coords => {
 const render = async board => {
   $board.innerHTML = '';
   generateRows(board.grid);
+  generateTokenBank(board.tokenBank);
 
   if (board.laser) {
     let curr;

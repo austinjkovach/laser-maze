@@ -51,11 +51,13 @@ const x = () => token('cell-blocker');
 class Board {
   // TODO should some of these be private to the class?
   // && Only expose actions through class methods
-  constructor(grid) {
+  constructor(grid, tokenBank = []) {
     this.grid = grid;
     this.laser = null;
     this.tokens = grid.flat().filter(n => n !== 0);
     this.points = 0;
+    this.initialBoard = grid;
+    this.tokenBank = tokenBank; // should this be an object of token types?
   }
 
   initLaser() {
