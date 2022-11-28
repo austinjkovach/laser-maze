@@ -1,6 +1,7 @@
 const $board = document.querySelector('#board');
 const generateTokenBank = tokens => {
   const $tokenBank = document.querySelector('#tokenBank');
+  $tokenBank.innerHTML = '';
   tokens.forEach(t => {
     const $token = document.createElement('div');
     $token.classList.add('cell');
@@ -17,13 +18,14 @@ const generateTokenBank = tokens => {
 const generateCellsInRow = (row, rowIndex) => {
   return row.map((c, j) => {
     const $cell = document.createElement('div');
-    $cell.setAttribute('coords', `[${j}, ${rowIndex}]`);
+    $cell.setAttribute('x', j);
+    $cell.setAttribute('y', rowIndex);
     $cell.classList.add('cell');
     $cell.addEventListener('click', () => {
       if (!c.canRotate) return;
       $cell.classList.remove(`rotate-${c.rotation * 90}`);
       c.rotation = (c.rotation + 1) % 4;
-      $cell.classListadd(`rotate-${c.rotation * 90}`);
+      $cell.classList.add(`rotate-${c.rotation * 90}`);
 
       // Reset the board when a rotation occurs
       activeBoard.laser = null;
