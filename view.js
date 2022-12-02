@@ -1,7 +1,12 @@
 const $board = document.querySelector('#board');
 const generateTokenBank = tokens => {
-  const $tokenBank = document.querySelector('#tokenBank');
+  let $tokenBank = document.querySelector('#tokenBank');
+  if (!$tokenBank) {
+    $tokenBank = document.createElement('div');
+    document.body.appendChild($tokenBank);
+  }
   $tokenBank.innerHTML = '';
+  $tokenBank.setAttribute('id', 'tokenBank');
   tokens.forEach(t => {
     const $token = document.createElement('div');
     $token.classList.add('cell');
@@ -13,7 +18,14 @@ const generateTokenBank = tokens => {
     if (t.type === 'cell-blocker') $token.classList.add('token-cell-blocker');
     $tokenBank.appendChild($token);
   });
+  if (!$tokenBank.children.length) $tokenBank.remove();
 };
+
+function dragstart_handler(ev) {
+  // Add the target element's id to the data transfer object
+  console.log('ev', ev);
+  ev.dataTransfer.setData('text/plain', ev.target.id);
+}
 
 const generateCellsInRow = (row, rowIndex) => {
   return row.map((c, j) => {
@@ -21,6 +33,7 @@ const generateCellsInRow = (row, rowIndex) => {
     $cell.setAttribute('x', j);
     $cell.setAttribute('y', rowIndex);
     $cell.classList.add('cell');
+    $cell.setAttribute('draggable', false);
     $cell.addEventListener('click', () => {
       if (!c.canRotate) return;
       $cell.classList.remove(`rotate-${c.rotation * 90}`);
@@ -32,6 +45,12 @@ const generateCellsInRow = (row, rowIndex) => {
       render(activeBoard);
     });
 
+    $cell.addEventListener('dragstart', dragstart_handler);
+
+    $cell.addEventListener('dragend', e => {
+      console.log('e', e);
+    });
+
     if (c.type === 'laser') $cell.classList.add('token-laser');
     if (c.type === 'target') $cell.classList.add('token-target');
     if (c.type === 'checkpoint') $cell.classList.add('token-checkpoint');
@@ -39,6 +58,7 @@ const generateCellsInRow = (row, rowIndex) => {
     if (c.type === 'double-mirror') $cell.classList.add('token-double-mirror');
     if (c.type === 'cell-blocker') $cell.classList.add('token-cell-blocker');
     if (c !== 0) $cell.classList.add(`rotate-${c.rotation * 90}`);
+    if (c.type) $cell.setAttribute('draggable', true);
 
     return $cell;
   });
