@@ -41,6 +41,7 @@ body {
 [class*='token-']:before {
   content: '';
   background-size: cover;
+  cursor: pointer;
 }
 
 .token-laser {
@@ -89,6 +90,10 @@ body {
 
 /* 🔄 */
 
+button {
+  cursor: pointer;
+}
+
 #levelSelect {
   display: flex;
   flex-wrap: wrap;
@@ -116,3 +121,9 @@ body {
   padding: 20px;
   border-radius: 16px;
 }
+
+/* [class*='token-']:before {
+  content: '';
+  background-size: cover;
+  cursor: pointer;
+} */

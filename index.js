@@ -60,7 +60,31 @@ class Board {
     this.tokenBank = tokenBank; // should this be an object of token types?
   }
 
+  calculateScore() {
+    this.points = this.tokens.filter(
+      t => t.type === 'target' && t.visited
+    ).length;
+    console.log('points:', this.points);
+  }
+
+  calculateVisited() {
+    const output = this.tokens.reduce(
+      (tot, curr) =>
+        curr.type !== 'cell-blocker' && curr.visited ? tot + 1 : tot,
+      0
+    );
+    console.log('output', output);
+    return output;
+  }
+
+  reset() {
+    this.tokens.forEach(t => (t.visited = false));
+    this.calculateScore();
+    this.calculateVisited();
+  }
+
   initLaser() {
+    this.reset();
     let directionMask;
     this.grid.forEach((row, i) =>
       row.forEach((cell, j) => {
@@ -101,6 +125,8 @@ class Board {
       this.processNode(curr);
       queue.push(...curr.children);
     }
+    this.calculateScore();
+    this.calculateVisited();
     if (print) this.printLaser();
   }
 
@@ -132,11 +158,10 @@ class Board {
       return;
     }
 
+    this.markAsVisited(coords);
     const directionMask = getDirectionMask(prev.coords, coords);
     const cellContents = this.grid[y][x];
     const nextCoords = this.getNextCoords(coords, directionMask, cellContents);
-
-    this.markAsVisited(coords);
 
     if (!nextCoords) return;
     nextCoords.forEach(nC => {
@@ -164,7 +189,7 @@ class Board {
         return [applyMask(coords, directionMask)];
       case 'target':
         // TODO only give points if facing the correct direction
-        this.points += 1;
+        // this.points += 1;
         return null;
       case 'checkpoint':
         // Based on rotation // 0, 2 == N/S, 1, 3 == E/W

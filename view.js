@@ -33,6 +33,7 @@ const generateCellsInRow = (row, rowIndex) => {
     $cell.setAttribute('x', j);
     $cell.setAttribute('y', rowIndex);
     $cell.classList.add('cell');
+
     $cell.setAttribute('draggable', false);
     $cell.addEventListener('click', () => {
       if (!c.canRotate) return;
@@ -41,6 +42,7 @@ const generateCellsInRow = (row, rowIndex) => {
       $cell.classList.add(`rotate-${c.rotation * 90}`);
 
       // Reset the board when a rotation occurs
+      activeBoard.reset();
       activeBoard.laser = null;
       render(activeBoard);
     });
@@ -87,11 +89,29 @@ const addBorderToCell = coords => {
   targetCell && targetCell.classList.add('border');
 };
 
+const renderTargetScore = board => {
+  const $score = document.querySelector('#score');
+  $score.innerHTML = 'Score: ' + board.points;
+};
+
+const renderVisitedScore = board => {
+  const $visited = document.querySelector('#visited');
+  const visited = board.calculateVisited();
+  const total = board.tokens.filter(t => t.type !== 'cell-blocker').length;
+  $visited.innerHTML = `${visited} / ${total}`;
+};
+
+const renderScore = board => {
+  renderTargetScore(board);
+  renderVisitedScore(board);
+};
+
 const render = async board => {
   $board.innerHTML = '';
   generateRows(board.grid);
   generateTokenBank(board.tokenBank);
 
+  renderScore(board);
   if (board.laser) {
     let curr;
     let queue = [board.laser.head];

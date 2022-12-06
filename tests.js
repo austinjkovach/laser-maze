@@ -197,7 +197,6 @@ const levels = [
     ],
     tokenBank: [],
   },
-  // tokenBank
   {
     grid: [
       [0, 0, 0, 0, 0],
@@ -205,6 +204,16 @@ const levels = [
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
       [x(), 0, 0, 0, l(3, true)],
+    ],
+    tokenBank: [m(), l(), b(), t(), x(), c()],
+  },
+  {
+    grid: [
+      [0, t(1, true), 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, m(0, true), 0, 0, l(3, true)],
+      [0, 0, 0, 0, 0],
     ],
     tokenBank: [m(), l(), b(), t(), x(), c()],
   },
@@ -216,6 +225,8 @@ const setLevelSelect = () => {
     const $levelBtn = document.createElement('button');
     $levelBtn.textContent = i + 1;
     $levelBtn.addEventListener('click', () => {
+      if (activeBoard) activeBoard.reset();
+
       const { grid, tokenBank } = level;
       const board = new Board(grid, tokenBank);
       activeBoard = board;
