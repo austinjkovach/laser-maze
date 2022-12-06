@@ -8,15 +8,25 @@ const generateTokenBank = tokens => {
   $tokenBank.innerHTML = '';
   $tokenBank.setAttribute('id', 'tokenBank');
   tokens.forEach(t => {
+    const $cell = document.createElement('div');
+    $cell.classList.add('cell');
+
+    console.log('T', t);
+    if (t === 0) return $tokenBank.appendChild($cell);
+
     const $token = document.createElement('div');
-    $token.classList.add('cell');
+    $token.classList.add('token');
+
     if (t.type === 'laser') $token.classList.add('token-laser');
     if (t.type === 'target') $token.classList.add('token-target');
     if (t.type === 'checkpoint') $token.classList.add('token-checkpoint');
     if (t.type === 'beam-splitter') $token.classList.add('token-beam-splitter');
     if (t.type === 'double-mirror') $token.classList.add('token-double-mirror');
     if (t.type === 'cell-blocker') $token.classList.add('token-cell-blocker');
-    $tokenBank.appendChild($token);
+    if (t !== 0) $token.classList.add(`rotate-${c.rotation * 90}`);
+    if (t.type) $token.setAttribute('draggable', true);
+    $cell.appendChild($token);
+    $tokenBank.appendChild($cell);
   });
   if (!$tokenBank.children.length) $tokenBank.remove();
 };
@@ -34,12 +44,17 @@ const generateCellsInRow = (row, rowIndex) => {
     $cell.setAttribute('y', rowIndex);
     $cell.classList.add('cell');
 
-    $cell.setAttribute('draggable', false);
-    $cell.addEventListener('click', () => {
+    if (!c.type) return $cell;
+
+    const $token = document.createElement('div');
+    $token.classList.add('token');
+
+    $token.setAttribute('draggable', false);
+    $token.addEventListener('click', () => {
       if (!c.canRotate) return;
-      $cell.classList.remove(`rotate-${c.rotation * 90}`);
+      $token.classList.remove(`rotate-${c.rotation * 90}`);
       c.rotation = (c.rotation + 1) % 4;
-      $cell.classList.add(`rotate-${c.rotation * 90}`);
+      $token.classList.add(`rotate-${c.rotation * 90}`);
 
       // Reset the board when a rotation occurs
       activeBoard.reset();
@@ -47,21 +62,22 @@ const generateCellsInRow = (row, rowIndex) => {
       render(activeBoard);
     });
 
-    $cell.addEventListener('dragstart', dragstart_handler);
+    $token.addEventListener('dragstart', dragstart_handler);
 
-    $cell.addEventListener('dragend', e => {
+    $token.addEventListener('dragend', e => {
       console.log('e', e);
     });
 
-    if (c.type === 'laser') $cell.classList.add('token-laser');
-    if (c.type === 'target') $cell.classList.add('token-target');
-    if (c.type === 'checkpoint') $cell.classList.add('token-checkpoint');
-    if (c.type === 'beam-splitter') $cell.classList.add('token-beam-splitter');
-    if (c.type === 'double-mirror') $cell.classList.add('token-double-mirror');
-    if (c.type === 'cell-blocker') $cell.classList.add('token-cell-blocker');
-    if (c !== 0) $cell.classList.add(`rotate-${c.rotation * 90}`);
-    if (c.type) $cell.setAttribute('draggable', true);
+    if (c.type === 'laser') $token.classList.add('token-laser');
+    if (c.type === 'target') $token.classList.add('token-target');
+    if (c.type === 'checkpoint') $token.classList.add('token-checkpoint');
+    if (c.type === 'beam-splitter') $token.classList.add('token-beam-splitter');
+    if (c.type === 'double-mirror') $token.classList.add('token-double-mirror');
+    if (c.type === 'cell-blocker') $token.classList.add('token-cell-blocker');
+    if (c !== 0) $token.classList.add(`rotate-${c.rotation * 90}`);
+    if (c.type) $token.setAttribute('draggable', true);
 
+    $cell.appendChild($token);
     return $cell;
   });
 };

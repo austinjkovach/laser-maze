@@ -29,55 +29,44 @@ body {
   border: 1px solid black;
 }
 
-.cell:before {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  height: 100%;
-  width: 100%;
-}
-
-[class*='token-']:before {
-  content: '';
+[class*='token-'] {
   background-size: cover;
   cursor: pointer;
+
+  height: 100%;
 }
 
 .token-laser {
-  content: '🔒';
-}
-.token-laser:before {
   background-image: url('./laser.png');
 }
 
-.token-target:before {
+.token-target {
   background-image: url('./target.png');
 }
 
-.token-checkpoint:before {
+.token-checkpoint {
   background-image: url('./checkpoint.png');
 }
 
-.token-beam-splitter:before {
+.token-beam-splitter {
   background-image: url('./beam-splitter.png');
 }
 
-.token-double-mirror:before {
+.token-double-mirror {
   background-image: url('./double-mirror.png');
 }
 
-.token-cell-blocker:before {
+.token-cell-blocker {
   background-image: url('./cell-blocker.png');
 }
 
-.rotate-90:before {
+.rotate-90 {
   transform: rotate(90deg);
 }
-.rotate-180:before {
+.rotate-180 {
   transform: rotate(180deg);
 }
-.rotate-270:before {
+.rotate-270 {
   transform: rotate(270deg);
 }
 
