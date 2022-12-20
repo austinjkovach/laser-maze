@@ -8,21 +8,24 @@ const generateTokenBank = tokens => {
   $tokenBank.innerHTML = '';
   $tokenBank.setAttribute('id', 'tokenBank');
   [...tokens, 0].forEach((t, idx) => {
+    /// Set up cell
     const $cell = document.createElement('div');
     $cell.classList.add('cell');
-
     $cell.addEventListener('dragenter', dragenter_handler);
     $cell.addEventListener('dragover', dragover_handler);
     $cell.addEventListener('drop', onDrop);
 
+    /// If no token, append to DOM and return early
     if (t === 0) return $tokenBank.appendChild($cell);
 
+    /// Set up token
     const $token = document.createElement('div');
     $token.classList.add('token');
     $token.addEventListener('dragstart', dragstart_handler);
     $token.addEventListener('drop', onDrop);
-
     $token.setAttribute('id', `token-${idx}`);
+
+    /// Add class based on token
     if (t.type) $token.setAttribute('draggable', true);
     if (t.type === 'laser') $token.classList.add('token-laser');
     if (t.type === 'target') $token.classList.add('token-target');
@@ -30,11 +33,15 @@ const generateTokenBank = tokens => {
     if (t.type === 'beam-splitter') $token.classList.add('token-beam-splitter');
     if (t.type === 'double-mirror') $token.classList.add('token-double-mirror');
     if (t.type === 'cell-blocker') $token.classList.add('token-cell-blocker');
-    if (t !== 0)
-      $token.classList.add(`rotate-${c.rotation ? c.rotation * 90 : 0}`);
+
+    /// Add token rotation
+    $token.classList.add(`rotate-${c.rotation ? c.rotation * 90 : 0}`);
+
+    /// Append nodes to DOM
     $cell.appendChild($token);
     $tokenBank.appendChild($cell);
   });
+
   if (!$tokenBank.children.length) $tokenBank.remove();
 };
 
