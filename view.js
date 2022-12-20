@@ -62,7 +62,7 @@ function dragenter_handler(e) {
 }
 
 function dragover_handler(e) {
-  console.log('ajk dragOVER', e);
+  // console.log('ajk dragOVER', e);
   e.preventDefault();
 }
 
