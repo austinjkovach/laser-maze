@@ -31,9 +31,13 @@ body {
 
 [class*='token-'] {
   background-size: cover;
-  cursor: pointer;
+  cursor: grab;
 
   height: 100%;
+}
+
+[class*='token-']:active {
+  cursor: grabbing;
 }
 
 .token-laser {

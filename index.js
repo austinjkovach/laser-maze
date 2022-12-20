@@ -140,7 +140,7 @@ class Board {
     return false;
   }
 
-  // TODO START HERE clean this up / make more readable
+  // TODO clean this up / make more readable
   processNode(node) {
     // 1) get laser direction
     // 2) calculate next based on laser direction, token type, and token rotation
