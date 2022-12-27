@@ -1,3 +1,25 @@
+//////////
+// TODO //
+//////////
+
+/// ✅) Add indices to tokenbank cell
+/// ✅) Differentiate between tokenBank->Board drags and Board-Board drags
+/// 2) All actions are through board state updates, then rerender based on new state
+/// ✅) flesh out addTokenFromBank && returnTokenToBank
+/// ✅) fix beam-splitter image rotation
+/// ✅) fix bug with dropping tokenBank on tokenBank
+/// 7) fix state updates when adding special tokens (target, laser)
+/// -✅- update visited count correctly
+/// --- update score correctly (when laser is turned off, should go to 0)
+/// --- display newly placed lasers correctly (rotation)
+/// 8) Clean up moveToken logic - keep DRY
+/// 9) Draggable
+/// 10) click to rotate newly placed pieces
+
+//////////
+// CODE //
+//////////
+
 const rotationMatrix = [
   [0, -1],
   [1, 0],
@@ -16,6 +38,7 @@ const rotationMatrix = [
   }
 */
 const token = (type, rotation = 0, canRotate = false) => {
+  console.log('can rotate', canRotate);
   return {
     type,
     rotation,
@@ -41,11 +64,11 @@ const isInBounds = (coords, board) => {
   return checkX && checkY;
 };
 
-const l = (rot, canRot = false) => token('laser', rot, canRot);
-const t = (rot, canRot = false) => token('target', rot, canRot);
-const c = (rot, canRot = false) => token('checkpoint', rot, canRot);
-const b = (rot, canRot = false) => token('beam-splitter', rot, canRot);
-const m = (rot, canRot = false) => token('double-mirror', rot, canRot);
+const l = (rot, canRotate = false) => token('laser', rot, canRotate);
+const t = (rot, canRotate = false) => token('target', rot, canRotate);
+const c = (rot, canRotate = false) => token('checkpoint', rot, canRotate);
+const b = (rot, canRotate = false) => token('beam-splitter', rot, canRotate);
+const m = (rot, canRotate = false) => token('double-mirror', rot, canRotate);
 const x = () => token('cell-blocker');
 
 class Board {
@@ -61,26 +84,34 @@ class Board {
   }
 
   calculateScore() {
-    this.points = this.tokens.filter(
+    const newPoints = this.tokens.filter(
       t => t.type === 'target' && t.visited
     ).length;
-    console.log('points:', this.points);
+
+    this.points = newPoints;
+    return newPoints;
+  }
+
+  calculateTokens() {
+    const newTokens = this.grid.flat().filter(n => n !== 0);
+    this.tokens = newTokens;
+    return newTokens;
   }
 
   calculateVisited() {
-    const output = this.tokens.reduce(
+    return this.calculateTokens().reduce(
       (tot, curr) =>
         curr.type !== 'cell-blocker' && curr.visited ? tot + 1 : tot,
       0
     );
-    console.log('output', output);
-    return output;
   }
 
   reset() {
+    this.laser = null;
     this.tokens.forEach(t => (t.visited = false));
-    this.calculateScore();
+    this.grid = this.initialBoard;
     this.calculateVisited();
+    this.calculateScore();
   }
 
   initLaser() {
@@ -175,6 +206,73 @@ class Board {
   }
 
   allTokensAreVisited = () => this.tokens.every(t => t.visited);
+
+  // addTokenFromBank (toCoords, token)
+  // returnTokenToBank (fromCoords) ==> find token from board.grid
+
+  moveToken = (fromCoords, toCoords, token) => {
+    const [x1, y1] = fromCoords;
+    const [x2, y2] = toCoords;
+
+    if (y1 === 'tokenBank' && y2 === 'tokenBank') {
+      console.log('4', fromCoords, toCoords);
+      this.moveTokenInBank(fromCoords, toCoords);
+      return;
+    }
+    if (y1 === 'tokenBank') {
+      if (toCoords.some(c => !c)) return;
+      this.addTokenFromBank(fromCoords, toCoords);
+      return;
+    }
+    if (y2 === 'tokenBank') {
+      console.log('2', fromCoords, toCoords, token);
+      this.returnTokenToBank(fromCoords, toCoords);
+      return;
+    }
+    if (y1 !== 'tokenBank' && y2 !== 'tokenBank') {
+      console.log('3', fromCoords, toCoords);
+      if (toCoords.some(c => !c)) return;
+      this.moveTokenOnBoard(fromCoords, toCoords);
+      return;
+    }
+  };
+
+  moveTokenOnBoard = (fromCoords, toCoords) => {
+    const [x1, y1] = fromCoords;
+    const token = this.grid[y1][x1];
+
+    const [x2, y2] = toCoords;
+    this.grid[y2][x2] = token;
+    this.grid[y1][x1] = 0;
+  };
+
+  moveTokenInBank = (fromCoords, toCoords) => {
+    const [fromIdx, _] = fromCoords;
+    const [toIdx, __] = toCoords;
+
+    const token = this.tokenBank[fromIdx];
+
+    this.tokenBank[toIdx] = token;
+    this.tokenBank[fromIdx] = 0;
+  };
+
+  addTokenFromBank = (fromCoords, toCoords) => {
+    const [fromIdx, _] = fromCoords;
+    const token = this.tokenBank[fromIdx];
+    const [x, y] = toCoords;
+
+    activeBoard.tokenBank[fromIdx] = 0;
+    activeBoard.grid[y][x] = token;
+  };
+
+  returnTokenToBank = (fromCoords, toCoords) => {
+    const [x1, y1] = fromCoords;
+    const [toIdx, _] = toCoords;
+
+    const token = this.grid[y1][x1];
+    this.grid[y1][x1] = 0;
+    this.tokenBank[toIdx] = token;
+  };
 
   getNextCoords = (coords, directionMask, token) => {
     if (!token) {
