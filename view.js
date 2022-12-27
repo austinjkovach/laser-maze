@@ -27,7 +27,7 @@ const generateTokenBank = tokens => {
 
     $token.setAttribute('id', `token-${idx}`);
 
-    const clickHandler = handleClick(t, $token);
+    const clickHandler = () => handleClick(t, $token);
     $token.addEventListener('click', clickHandler);
 
     /// Add class based on token
@@ -179,7 +179,6 @@ const renderTargetScore = board => {
 };
 
 const renderVisitedScore = board => {
-  console.log('RSV');
   const $visited = document.querySelector('#visited');
   const visited = board.calculateVisited();
   const total = board
