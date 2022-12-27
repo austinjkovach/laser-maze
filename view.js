@@ -27,16 +27,8 @@ const generateTokenBank = tokens => {
 
     $token.setAttribute('id', `token-${idx}`);
 
-    $token.addEventListener('click', () => {
-      if (!t.canRotate) return;
-      $token.classList.remove(`rotate-${t.rotation ? t.rotation * 90 : 0}`);
-      t.rotation = (t.rotation + 1) % 4;
-      $token.classList.add(`rotate-${t.rotation ? t.rotation * 90 : 0}`);
-
-      // activeBoard.laser = null;
-      activeBoard.reset();
-      render(activeBoard);
-    });
+    const clickHandler = handleClick(t, $token);
+    $token.addEventListener('click', clickHandler);
 
     /// Add class based on token
     if (t.type) {
@@ -106,6 +98,16 @@ function onDrop(e) {
   render(activeBoard);
 }
 
+function handleClick(token, $el) {
+  if (!token.canRotate) return;
+  $el.classList.remove(`rotate-${token.rotation ? token.rotation * 90 : 0}`);
+  token.rotation = (token.rotation + 1) % 4;
+  $el.classList.add(`rotate-${token.rotation ? token.rotation * 90 : 0}`);
+
+  activeBoard.reset();
+  render(activeBoard);
+}
+
 const generateCellsInRow = (row, rowIndex) => {
   return row.map((c, j) => {
     const $cell = document.createElement('div');
@@ -129,15 +131,9 @@ const generateCellsInRow = (row, rowIndex) => {
     // TODO Abstract click-to-rotate handler
     // TODO Rotating clears dragged pieces
     // TODO Use CSS classes of rotate-[0-3] instead of rotate-[0-270]
-    $token.addEventListener('click', () => {
-      if (!c.canRotate) return;
-      $token.classList.remove(`rotate-${c.rotation ? c.rotation * 90 : 0}`);
-      c.rotation = (c.rotation + 1) % 4;
-      $token.classList.add(`rotate-${c.rotation ? c.rotation * 90 : 0}`);
 
-      activeBoard.reset();
-      render(activeBoard);
-    });
+    const clickHandler = () => handleClick(c, $token);
+    $token.addEventListener('click', clickHandler);
 
     if (c.type) {
       $token.classList.add(`token-${c.type}`);
