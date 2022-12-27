@@ -217,6 +217,16 @@ const levels = [
     ],
     tokenBank: [m(), l(), b(), t(), x(), c()],
   },
+  {
+    grid: [
+      [t(1, true), 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [m(0, true), 0, 0, l(3, true)],
+      [0, 0, 0, 0],
+    ],
+    tokenBank: [m(0, true)],
+  },
 ];
 
 let activeBoard = null;

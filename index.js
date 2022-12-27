@@ -10,8 +10,8 @@
 /// ✅) fix bug with dropping tokenBank on tokenBank
 /// 7) fix state updates when adding special tokens (target, laser)
 /// -✅- update visited count correctly
-/// --- update score correctly (when laser is turned off, should go to 0)
-/// --- display newly placed lasers correctly (rotation)
+/// -✅- update score correctly (when laser is turned off, should go to 0)
+/// -✅- display newly placed lasers correctly (rotation)
 /// 8) Clean up moveToken logic - keep DRY
 /// 9) Draggable
 /// 10) click to rotate newly placed pieces
