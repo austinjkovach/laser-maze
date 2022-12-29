@@ -4,7 +4,7 @@
 
 /// ✅) Add indices to tokenbank cell
 /// ✅) Differentiate between tokenBank->Board drags and Board-Board drags
-/// 2) All actions are through board state updates, then rerender based on new state
+/// ✅) All actions are through board state updates, then rerender based on new state
 /// ✅) flesh out addTokenFromBank && returnTokenToBank
 /// ✅) fix beam-splitter image rotation
 /// ✅) fix bug with dropping tokenBank on tokenBank
@@ -15,7 +15,17 @@
 /// 8) Clean up moveToken logic - keep DRY
 /// ✅) Draggable
 /// ✅) click to rotate newly placed pieces
-/// 11) hard reset
+/// ✅) hard reset
+/// 11) correct target facings
+/// 12) localstorage to keep track of solved puzzles
+/// 13) lock/rotate icons
+/// 14) get token from drag info
+
+///////////
+// NOTES //
+///////////
+
+/// https://stackoverflow.com/questions/23450588/isometric-camera-with-three-js
 
 //////////
 // CODE //
@@ -29,15 +39,13 @@ const rotationMatrix = [
 ];
 
 /*
-  laser
-  target
-
   {
     type: 'target' | 'laser' | 'checkpoint' | 'beam-splitter' | 'double-mirror' | 'cell-blocker';
     rotation: 0 | 1 | 2 | 3;
     visited: true | false
   }
 */
+
 const token = (type, rotation = 0, canRotate = false) => {
   return {
     type,
@@ -72,6 +80,7 @@ const m = (rot, canRotate = false) => token('double-mirror', rot, canRotate);
 const x = () => token('cell-blocker');
 
 const deepClone = arr => [...arr.map(el => (Array.isArray(el) ? [...el] : el))];
+
 class Board {
   // TODO should some of these be private to the class?
   // && Only expose actions through class methods
@@ -232,6 +241,7 @@ class Board {
   // addTokenFromBank (toCoords, token)
   // returnTokenToBank (fromCoords) ==> find token from board.grid
 
+  // TODO clean this up, don't use extra functions
   moveToken = (fromCoords, toCoords, token) => {
     const [x1, y1] = fromCoords;
     const [x2, y2] = toCoords;
@@ -305,9 +315,38 @@ class Board {
       case 'laser':
         return [applyMask(coords, directionMask)];
       case 'target':
+        let targetReflectionMask;
+        if (rotation === 0) {
+          // N
+          //  '\'
+          console.log('direcitonmask');
+          if (directionMask[0]) {
+            // [1, 0] -> [0, 1] / [-1, 0] -> [0, -1]
+            // S -> E / N -> W
+            targetReflectionMask = [0, directionMask[0]];
+          } else {
+            // [0, 1] -> [1, 0] / [0, -1] -> [-1, 0]
+            // E -> S / W -> N
+            targetReflectionMask = [directionMask[1], 0];
+          }
+        } else {
+          // E/W - Counter-clockwise
+          //  '/'
+          if (directionMask[0]) {
+            // [1, 0] -> [0, -1] / [-1, 0] -> [0, 1]
+            // S -> W / N -> E
+            targetReflectionMask = [0, -directionMask[0]];
+          } else {
+            // [0, 1] -> [-1, 0] / [0, -1] -> [1, 0]
+            // E -> N / W -> S
+            targetReflectionMask = [-directionMask[1], 0];
+          }
+        }
         // TODO only give points if facing the correct direction
         // this.points += 1;
         return null;
+        return;
+        [applyMask(coords, reflectionMask)];
       case 'checkpoint':
         // Based on rotation // 0, 2 == N/S, 1, 3 == E/W
         if (!(rotation % 2)) {

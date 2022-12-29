@@ -88,8 +88,8 @@ function onDrop(e) {
   const x2 = e.target.getAttribute('x');
   const y2 = e.target.getAttribute('y');
 
-  /// TODO don't hardcode this
-  /// TODO use targetToken somehow?
+  /// TODO (14) don't hardcode this
+  /// TODO (14) use targetToken somehow?
   const targetToken = token('double-mirror', 0, true);
 
   activeBoard.moveToken([x1, y1], [x2, y2], targetToken);
@@ -106,42 +106,53 @@ function handleClick(token, $el) {
   render(activeBoard);
 }
 
+const createCell = (x, y) => {
+  const $cell = document.createElement('div');
+
+  $cell.setAttribute('x', x);
+  $cell.setAttribute('y', y);
+  $cell.classList.add('cell');
+
+  $cell.addEventListener('dragenter', dragenter_handler);
+  $cell.addEventListener('dragover', dragover_handler);
+  $cell.addEventListener('drop', onDrop);
+  return $cell;
+};
+
+const createToken = cellData => {
+  const $token = document.createElement('div');
+  $token.classList.add('token');
+  $token.addEventListener('dragstart', dragstart_handler);
+
+  $token.setAttribute('draggable', false);
+
+  // TODO Abstract click-to-rotate handler
+  // TODO Rotating clears dragged pieces
+  // TODO Use CSS classes of rotate-[0-3] instead of rotate-[0-270]
+
+  const tokenClickHandler = () => handleClick(cellData, $token);
+  $token.addEventListener('click', tokenClickHandler);
+
+  if (cellData.type) {
+    $token.classList.add(`token-${cellData.type}`);
+    $token.setAttribute('data-type', cellData.type);
+    $token.setAttribute('draggable', true);
+    $token.setAttribute('rotation', cellData.rotation);
+  }
+
+  if (cellData !== 0)
+    $token.classList.add(
+      `rotate-${cellData.rotation ? cellData.rotation * 90 : 0}`
+    );
+
+  return $token;
+};
+
 const generateCellsInRow = (row, rowIndex) => {
   return row.map((c, j) => {
-    const $cell = document.createElement('div');
-
-    $cell.setAttribute('x', j);
-    $cell.setAttribute('y', rowIndex);
-    $cell.classList.add('cell');
-
-    $cell.addEventListener('dragenter', dragenter_handler);
-    $cell.addEventListener('dragover', dragover_handler);
-    $cell.addEventListener('drop', onDrop);
-
+    const $cell = createCell(j, rowIndex);
     if (!c.type) return $cell;
-
-    const $token = document.createElement('div');
-    $token.classList.add('token');
-    $token.addEventListener('dragstart', dragstart_handler);
-
-    $token.setAttribute('draggable', false);
-
-    // TODO Abstract click-to-rotate handler
-    // TODO Rotating clears dragged pieces
-    // TODO Use CSS classes of rotate-[0-3] instead of rotate-[0-270]
-
-    const tokenClickHandler = () => handleClick(c, $token);
-    $token.addEventListener('click', tokenClickHandler);
-
-    if (c.type) {
-      $token.classList.add(`token-${c.type}`);
-      $token.setAttribute('data-type', c.type);
-      $token.setAttribute('draggable', true);
-      $token.setAttribute('rotation', c.rotation);
-    }
-
-    if (c !== 0)
-      $token.classList.add(`rotate-${c.rotation ? c.rotation * 90 : 0}`);
+    const $token = createToken(c);
 
     $cell.appendChild($token);
     return $cell;

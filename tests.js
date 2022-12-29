@@ -219,13 +219,21 @@ const levels = [
   },
   {
     grid: [
-      [0, t(1, true), 0, 0, 0],
+      [0, t(0, true), 0, 0, 0],
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
       [0, m(0, true), 0, 0, l(3, true)],
       [0, 0, 0, 0, 0],
     ],
     tokenBank: [m(0, true)],
+  },
+  {
+    grid: [
+      [0, 0, t(0)],
+      [0, 0, 0],
+      [0, 0, l(0)],
+    ],
+    tokenBank: [],
   },
 ];
 
@@ -271,7 +279,8 @@ const badTest = (label, test, expectation) => {
 };
 
 const testBoard = grid => {
-  const board = new Board(grid);
+  const { initialBoard, tokenBank } = grid;
+  const board = new Board(initialBoard, tokenBank);
   board.initLaser();
   render(board);
   return board;
@@ -482,13 +491,12 @@ setLevelSelect();
 document.querySelector('#initLaser').addEventListener('click', () => {
   if (activeBoard) {
     activeBoard.initLaser();
-    // TODO START HERE add testing into this
-    // testBoard(activeBoard);
-    // badTest(
-    //   null,
-    //   activeBoard.points,
-    //   activeBoard.tokens.filter(t => t.type === 'target')
-    // );
+    testBoard(activeBoard);
+    badTest(
+      null,
+      activeBoard.points,
+      activeBoard.tokens.filter(t => t.type === 'target')
+    );
     render(activeBoard);
   }
 });
