@@ -8,13 +8,14 @@
 /// ✅) flesh out addTokenFromBank && returnTokenToBank
 /// ✅) fix beam-splitter image rotation
 /// ✅) fix bug with dropping tokenBank on tokenBank
-/// 7) fix state updates when adding special tokens (target, laser)
+/// ✅) fix state updates when adding special tokens (target, laser)
 /// -✅- update visited count correctly
 /// -✅- update score correctly (when laser is turned off, should go to 0)
 /// -✅- display newly placed lasers correctly (rotation)
 /// 8) Clean up moveToken logic - keep DRY
-/// 9) Draggable
-/// 10) click to rotate newly placed pieces
+/// ✅) Draggable
+/// ✅) click to rotate newly placed pieces
+/// 11) hard reset
 
 //////////
 // CODE //
@@ -38,7 +39,6 @@ const rotationMatrix = [
   }
 */
 const token = (type, rotation = 0, canRotate = false) => {
-  console.log('can rotate', canRotate);
   return {
     type,
     rotation,
@@ -71,16 +71,18 @@ const b = (rot, canRotate = false) => token('beam-splitter', rot, canRotate);
 const m = (rot, canRotate = false) => token('double-mirror', rot, canRotate);
 const x = () => token('cell-blocker');
 
+const deepClone = arr => [...arr.map(el => (Array.isArray(el) ? [...el] : el))];
 class Board {
   // TODO should some of these be private to the class?
   // && Only expose actions through class methods
   constructor(grid, tokenBank = []) {
-    this.grid = grid;
+    this.grid = deepClone(grid);
     this.laser = null;
     this.tokens = grid.flat().filter(n => n !== 0);
     this.points = 0;
-    this.initialBoard = grid;
-    this.tokenBank = tokenBank; // should this be an object of token types?
+    this.initialBoard = deepClone(grid);
+    this.initialTokenBank = deepClone(tokenBank);
+    this.tokenBank = deepClone(tokenBank); // should this be an object of token types?
   }
 
   calculateScore() {
@@ -106,16 +108,36 @@ class Board {
     );
   }
 
-  reset() {
+  getInitialBoard = () => deepClone(this.initialBoard);
+
+  /*
+
+  reset options
+    move piece
+      turn off laser
+      update board
+      update score
+      update visited
+    level select button
+      reset board
+
+  */
+
+  recalculateBoard() {
     this.laser = null;
     this.tokens.forEach(t => (t.visited = false));
-    this.grid = this.initialBoard;
     this.calculateVisited();
     this.calculateScore();
   }
 
+  reset() {
+    this.grid = this.getInitialBoard();
+    this.tokenBank = [...this.initialTokenBank.map(el => el)];
+    this.recalculateBoard();
+  }
+
   initLaser() {
-    this.reset();
+    this.recalculateBoard();
     let directionMask;
     this.grid.forEach((row, i) =>
       row.forEach((cell, j) => {
@@ -215,7 +237,6 @@ class Board {
     const [x2, y2] = toCoords;
 
     if (y1 === 'tokenBank' && y2 === 'tokenBank') {
-      console.log('4', fromCoords, toCoords);
       this.moveTokenInBank(fromCoords, toCoords);
       return;
     }
@@ -225,12 +246,10 @@ class Board {
       return;
     }
     if (y2 === 'tokenBank') {
-      console.log('2', fromCoords, toCoords, token);
       this.returnTokenToBank(fromCoords, toCoords);
       return;
     }
     if (y1 !== 'tokenBank' && y2 !== 'tokenBank') {
-      console.log('3', fromCoords, toCoords);
       if (toCoords.some(c => !c)) return;
       this.moveTokenOnBoard(fromCoords, toCoords);
       return;

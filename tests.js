@@ -219,11 +219,11 @@ const levels = [
   },
   {
     grid: [
-      [t(1, true), 0, 0, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-      [m(0, true), 0, 0, l(3, true)],
-      [0, 0, 0, 0],
+      [0, t(1, true), 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, m(0, true), 0, 0, l(3, true)],
+      [0, 0, 0, 0, 0],
     ],
     tokenBank: [m(0, true)],
   },
@@ -235,7 +235,10 @@ const setLevelSelect = () => {
     const $levelBtn = document.createElement('button');
     $levelBtn.textContent = i + 1;
     $levelBtn.addEventListener('click', () => {
-      if (activeBoard) activeBoard.reset();
+      if (activeBoard) {
+        console.log('BUTTON');
+        activeBoard.reset();
+      }
 
       const { grid, tokenBank } = level;
       const board = new Board(grid, tokenBank);

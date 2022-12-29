@@ -27,8 +27,8 @@ const generateTokenBank = tokens => {
 
     $token.setAttribute('id', `token-${idx}`);
 
-    const clickHandler = () => handleClick(t, $token);
-    $token.addEventListener('click', clickHandler);
+    const tokenClickHandler = () => handleClick(t, $token);
+    $token.addEventListener('click', tokenClickHandler);
 
     /// Add class based on token
     if (t.type) {
@@ -50,10 +50,8 @@ const generateTokenBank = tokens => {
 };
 
 function dragstart_handler(e) {
-  console.log('ajk dragSTART', e);
   const parent = e.target.parentElement;
   const parentCoords = [parent.getAttribute('x'), parent.getAttribute('y')];
-  console.log('ajk PARENT', parent, parentCoords);
 
   const dataObject = {
     fromCoords: parentCoords,
@@ -81,7 +79,7 @@ function dragend_handler(e) {
 }
 
 function onDrop(e) {
-  activeBoard.reset();
+  activeBoard.recalculateBoard();
   e.preventDefault();
 
   const data = JSON.parse(e.dataTransfer.getData('application/json'));
@@ -104,7 +102,7 @@ function handleClick(token, $el) {
   token.rotation = (token.rotation + 1) % 4;
   $el.classList.add(`rotate-${token.rotation ? token.rotation * 90 : 0}`);
 
-  activeBoard.reset();
+  activeBoard.recalculateBoard();
   render(activeBoard);
 }
 
@@ -132,8 +130,8 @@ const generateCellsInRow = (row, rowIndex) => {
     // TODO Rotating clears dragged pieces
     // TODO Use CSS classes of rotate-[0-3] instead of rotate-[0-270]
 
-    const clickHandler = () => handleClick(c, $token);
-    $token.addEventListener('click', clickHandler);
+    const tokenClickHandler = () => handleClick(c, $token);
+    $token.addEventListener('click', tokenClickHandler);
 
     if (c.type) {
       $token.classList.add(`token-${c.type}`);
@@ -193,7 +191,6 @@ const renderScore = board => {
 };
 
 const render = async board => {
-  console.log('RENDER');
   $board.innerHTML = '';
   generateRows(board.grid);
   generateTokenBank(board.tokenBank);
