@@ -84,7 +84,6 @@ function onDrop(e) {
 
   const data = JSON.parse(e.dataTransfer.getData('application/json'));
   const [x1, y1] = data.fromCoords;
-  console.log('ajk DROP', e.target, data, typeof data);
   const x2 = e.target.getAttribute('x');
   const y2 = e.target.getAttribute('y');
 
@@ -126,9 +125,7 @@ const createToken = cellData => {
 
   $token.setAttribute('draggable', false);
 
-  // TODO Abstract click-to-rotate handler
-  // TODO Rotating clears dragged pieces
-  // TODO Use CSS classes of rotate-[0-3] instead of rotate-[0-270]
+  // TODO??? Use CSS classes of rotate-[0-3] instead of rotate-[0-270]
 
   const tokenClickHandler = () => handleClick(cellData, $token);
   $token.addEventListener('click', tokenClickHandler);

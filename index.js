@@ -80,10 +80,9 @@ const m = (rot, canRotate = false) => token('double-mirror', rot, canRotate);
 const x = () => token('cell-blocker');
 
 const deepClone = arr => [...arr.map(el => (Array.isArray(el) ? [...el] : el))];
+const deepEqual = (arr1, arr2) => arr1[0] === arr2[0] && arr1[1] === arr2[1];
 
 class Board {
-  // TODO should some of these be private to the class?
-  // && Only expose actions through class methods
   constructor(grid, tokenBank = []) {
     this.grid = deepClone(grid);
     this.laser = null;
@@ -95,6 +94,7 @@ class Board {
   }
 
   calculateScore() {
+    // TODO this needs to change with correct target behavior (only 1 face scores points)
     const newPoints = this.tokens.filter(
       t => t.type === 'target' && t.visited
     ).length;
@@ -118,19 +118,6 @@ class Board {
   }
 
   getInitialBoard = () => deepClone(this.initialBoard);
-
-  /*
-
-  reset options
-    move piece
-      turn off laser
-      update board
-      update score
-      update visited
-    level select button
-      reset board
-
-  */
 
   recalculateBoard() {
     this.laser = null;
@@ -316,37 +303,95 @@ class Board {
         return [applyMask(coords, directionMask)];
       case 'target':
         let targetReflectionMask;
+
+        /*
+
+          0 => down wins (y == 1)
+            dM == [1, 0] #==> [0, 1]
+            dM == [0, -1] #==> [-1, 0]
+            [-1, +1]
+
+          1 => right wins (x == -1)
+            dM == [1, 0] #==> [0, -1]
+            dM == [0, 1] #==> [-1, 0]
+            [-1, -1]
+
+          2 => up wins (y == -1)
+            dM == [0, 1] #==> [1, 0]
+            dM == [-1, 0] #==> [0, -1]
+            [+1, -1]
+
+          3 => left wins (x == 1)
+            dM == [0, -1] #==> [1, 0]
+            dM == [-1, 0] #==> [0, 1]
+            [+1, +1]
+
+        */
+
         if (rotation === 0) {
-          // N
-          //  '\'
-          console.log('direcitonmask');
-          if (directionMask[0]) {
-            // [1, 0] -> [0, 1] / [-1, 0] -> [0, -1]
-            // S -> E / N -> W
-            targetReflectionMask = [0, directionMask[0]];
-          } else {
-            // [0, 1] -> [1, 0] / [0, -1] -> [-1, 0]
-            // E -> S / W -> N
-            targetReflectionMask = [directionMask[1], 0];
+          if (deepEqual(directionMask, [0, 1])) {
+            // this.points += 1;
+            return null;
           }
-        } else {
-          // E/W - Counter-clockwise
-          //  '/'
-          if (directionMask[0]) {
-            // [1, 0] -> [0, -1] / [-1, 0] -> [0, 1]
-            // S -> W / N -> E
-            targetReflectionMask = [0, -directionMask[0]];
-          } else {
-            // [0, 1] -> [-1, 0] / [0, -1] -> [1, 0]
-            // E -> N / W -> S
-            targetReflectionMask = [-directionMask[1], 0];
+          if (deepEqual(directionMask, [1, 0])) {
+            return [applyMask(coords, [0, 1])];
+            return [[0, 1]];
           }
+          if (deepEqual(directionMask, [0, -1])) {
+            return [applyMask(coords, [-1, 0])];
+            return [[-1, 0]];
+          }
+          return null;
+        }
+        if (rotation === 1) {
+          if (deepEqual(directionMask, [-1, 0])) {
+            // this.points += 1;
+            return null;
+          }
+          if (deepEqual(directionMask, [1, 0])) {
+            return [applyMask(coords, [0, -1])];
+            return [[0, -1]];
+          }
+          if (deepEqual(directionMask, [0, 1])) {
+            return [applyMask(coords, [-1, 0])];
+            return [[-1, 0]];
+          }
+          return null;
+        }
+        if (rotation === 2) {
+          if (deepEqual(directionMask, [0, -1])) {
+            // this.points += 1;
+            return null;
+          }
+          if (deepEqual(directionMask, [0, 1])) {
+            return [applyMask(coords, [1, 0])];
+            return [[1, 0]];
+          }
+          if (deepEqual(directionMask, [-1, 0])) {
+            return [applyMask(coords, [0, -1])];
+            return [[0, -1]];
+          }
+          return null;
+        }
+        if (rotation === 3) {
+          if (deepEqual(directionMask, [1, 0])) {
+            // this.points += 1;
+            return null;
+          }
+          if (deepEqual(directionMask, [0, -1])) {
+            return [applyMask(coords, [1, 0])];
+            return [[1, 0]];
+          }
+          if (deepEqual(directionMask, [-1, 0])) {
+            return [applyMask(coords, [0, 1])];
+            return [[0, 1]];
+          }
+          return null;
         }
         // TODO only give points if facing the correct direction
         // this.points += 1;
         return null;
-        return;
-        [applyMask(coords, reflectionMask)];
+      // [applyMask(coords, reflectionMask)];
       case 'checkpoint':
         // Based on rotation // 0, 2 == N/S, 1, 3 == E/W
         if (!(rotation % 2)) {
@@ -391,7 +436,7 @@ class Board {
       case 'cell-blocker':
         return [applyMask(coords, directionMask)];
       default:
-        return [];
+        return null;
     }
   };
 }

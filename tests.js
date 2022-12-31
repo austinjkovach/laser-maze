@@ -235,6 +235,30 @@ const levels = [
     ],
     tokenBank: [],
   },
+  {
+    grid: [
+      [0, 0, t(1)],
+      [0, 0, 0],
+      [0, 0, l(0)],
+    ],
+    tokenBank: [],
+  },
+  {
+    grid: [
+      [0, 0, t(2)],
+      [0, 0, 0],
+      [0, 0, l(0)],
+    ],
+    tokenBank: [],
+  },
+  {
+    grid: [
+      [t(3), 0, 0],
+      [0, 0, 0],
+      [l(0), 0, 0],
+    ],
+    tokenBank: [],
+  },
 ];
 
 let activeBoard = null;
@@ -244,7 +268,6 @@ const setLevelSelect = () => {
     $levelBtn.textContent = i + 1;
     $levelBtn.addEventListener('click', () => {
       if (activeBoard) {
-        console.log('BUTTON');
         activeBoard.reset();
       }
 
@@ -491,12 +514,12 @@ setLevelSelect();
 document.querySelector('#initLaser').addEventListener('click', () => {
   if (activeBoard) {
     activeBoard.initLaser();
-    testBoard(activeBoard);
-    badTest(
-      null,
-      activeBoard.points,
-      activeBoard.tokens.filter(t => t.type === 'target')
-    );
+    // testBoard(activeBoard);
+    // badTest(
+    //   null,
+    //   activeBoard.points,
+    //   activeBoard.tokens.filter(t => t.type === 'target')
+    // );
     render(activeBoard);
   }
 });
