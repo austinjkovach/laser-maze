@@ -47,12 +47,15 @@ const rotationMatrix = [
 */
 
 const token = (type, rotation = 0, canRotate = false) => {
-  return {
+  const returnObj = {
     type,
     rotation,
     canRotate,
     visited: type === 'cell-blocker', // cell-blockers do not need to be visited in order for a solution to be valid
   };
+
+  if (type === 'target') return { ...returnObj, active: false };
+  return returnObj;
 };
 
 const getDirectionMask = (prev, curr) => {
@@ -96,7 +99,7 @@ class Board {
   calculateScore() {
     // TODO this needs to change with correct target behavior (only 1 face scores points)
     const newPoints = this.tokens.filter(
-      t => t.type === 'target' && t.visited
+      t => t.type === 'target' && t.active
     ).length;
 
     this.points = newPoints;
@@ -122,6 +125,9 @@ class Board {
   recalculateBoard() {
     this.laser = null;
     this.tokens.forEach(t => (t.visited = false));
+    this.tokens
+      .filter(t => t.type === 'target')
+      .forEach(t => (t.active = false));
     this.calculateVisited();
     this.calculateScore();
   }
@@ -327,64 +333,57 @@ class Board {
             [+1, +1]
 
         */
+        const [x, y] = coords;
 
         if (rotation === 0) {
           if (deepEqual(directionMask, [0, 1])) {
-            // this.points += 1;
+            this.grid[y][x].active = true;
             return null;
           }
           if (deepEqual(directionMask, [1, 0])) {
             return [applyMask(coords, [0, 1])];
-            return [[0, 1]];
           }
           if (deepEqual(directionMask, [0, -1])) {
             return [applyMask(coords, [-1, 0])];
-            return [[-1, 0]];
           }
           return null;
         }
         if (rotation === 1) {
           if (deepEqual(directionMask, [-1, 0])) {
-            // this.points += 1;
+            this.grid[y][x].active = true;
             return null;
           }
           if (deepEqual(directionMask, [1, 0])) {
             return [applyMask(coords, [0, -1])];
-            return [[0, -1]];
           }
           if (deepEqual(directionMask, [0, 1])) {
             return [applyMask(coords, [-1, 0])];
-            return [[-1, 0]];
           }
           return null;
         }
         if (rotation === 2) {
           if (deepEqual(directionMask, [0, -1])) {
-            // this.points += 1;
+            this.grid[y][x].active = true;
             return null;
           }
           if (deepEqual(directionMask, [0, 1])) {
             return [applyMask(coords, [1, 0])];
-            return [[1, 0]];
           }
           if (deepEqual(directionMask, [-1, 0])) {
             return [applyMask(coords, [0, -1])];
-            return [[0, -1]];
           }
           return null;
         }
         if (rotation === 3) {
           if (deepEqual(directionMask, [1, 0])) {
-            // this.points += 1;
+            this.grid[y][x].active = true;
             return null;
           }
           if (deepEqual(directionMask, [0, -1])) {
             return [applyMask(coords, [1, 0])];
-            return [[1, 0]];
           }
           if (deepEqual(directionMask, [-1, 0])) {
             return [applyMask(coords, [0, 1])];
-            return [[0, 1]];
           }
           return null;
         }
