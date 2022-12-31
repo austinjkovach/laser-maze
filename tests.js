@@ -84,7 +84,7 @@ const levels = [
   },
   {
     grid: [
-      [t(), 0, m(0)],
+      [t(1), 0, m(0)],
       [0, 0, 0],
       [0, 0, l()],
     ],
@@ -92,7 +92,7 @@ const levels = [
   },
   {
     grid: [
-      [m(1), 0, t()],
+      [m(1), 0, t(3)],
       [0, 0, 0],
       [l(0), 0, 0],
     ],
@@ -141,7 +141,7 @@ const levels = [
     grid: [
       [m(0), 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
-      [0, t(), 0, l(3), 0],
+      [0, t(1), 0, l(3), 0],
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
     ],
@@ -151,7 +151,7 @@ const levels = [
     grid: [
       [x(), 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
-      [0, t(), 0, l(3), 0],
+      [0, t(1), 0, l(3), 0],
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
     ],
@@ -159,9 +159,9 @@ const levels = [
   },
   {
     grid: [
-      [0, 0, t(), 0, 0],
+      [0, 0, t(2), 0, 0],
       [0, 0, 0, 0, 0],
-      [0, t(), b(), 0, l(3)],
+      [0, t(1), b(), 0, l(3)],
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
     ],
@@ -170,9 +170,9 @@ const levels = [
   {
     grid: [
       [0, 0, 0, 0, 0],
-      [0, 0, 0, t(), 0],
+      [0, 0, 0, t(2), 0],
       [0, 0, 0, 0, 0],
-      [t(), 0, 0, b(), l(3)],
+      [t(1), 0, 0, b(), l(3)],
       [0, 0, 0, 0, 0],
     ],
     tokenBank: [],
@@ -181,7 +181,7 @@ const levels = [
     grid: [
       [m(1), 0, c(1), 0, m(0)],
       [b(), 0, 0, m(), 0],
-      [b(), b(), t(), 0, x()],
+      [b(), b(), t(3), 0, x()],
       [0, t(), 0, t(), 0],
       [t(), 0, 0, 0, l(0)],
     ],
@@ -189,11 +189,11 @@ const levels = [
   },
   {
     grid: [
-      [0, 0, 0, t(), 0],
+      [0, 0, 0, t(2), 0],
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
-      [t(), 0, 0, b(), l(3)],
+      [t(1), 0, 0, b(), l(3)],
     ],
     tokenBank: [],
   },
@@ -209,7 +209,7 @@ const levels = [
   },
   {
     grid: [
-      [0, t(1, true), 0, 0, 0],
+      [0, t(2, true), 0, 0, 0],
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
       [0, m(0, true), 0, 0, l(3, true)],
@@ -219,7 +219,7 @@ const levels = [
   },
   {
     grid: [
-      [0, t(0, true), 0, 0, 0],
+      [0, t(2, true), 0, 0, 0],
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
       [0, m(0, true), 0, 0, l(3, true)],
@@ -314,12 +314,13 @@ setLevelSelect();
 document.querySelector('#initLaser').addEventListener('click', () => {
   if (activeBoard) {
     activeBoard.initLaser();
-    // testBoard(activeBoard);
-    // badTest(
-    //   null,
-    //   activeBoard.points,
-    //   activeBoard.tokens.filter(t => t.type === 'target')
-    // );
+    testBoard(activeBoard);
+    badTest(
+      null,
+      activeBoard.points,
+      activeBoard.tokens.filter(t => t.type === 'target' && t.active === true)
+        .length
+    );
     render(activeBoard);
   }
 });
