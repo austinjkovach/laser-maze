@@ -68,6 +68,36 @@ body {
   background-image: url('./cell-blocker.png');
 }
 
+.token-laser.token-can-rotate {
+  background-image: url('./rotate.png'), url('./laser.png');
+}
+
+.token-target.token-can-rotate {
+  background-image: url('./rotate.png'), url('./target.png');
+}
+
+.token-checkpoint.token-can-rotate {
+  background-image: url('./rotate.png'), url('./checkpoint.png');
+}
+
+.token-beam-splitter.token-can-rotate {
+  background-image: url('./rotate.png'), url('./beam-splitter.png');
+}
+
+.token-double-mirror.token-can-rotate {
+  background-image: url('./rotate.png'), url('./double-mirror.png');
+}
+
+.token-cell-blocker.token-can-rotate {
+  background-image: url('./rotate.png'), url('./cell-blocker.png');
+}
+
+.token-can-rotate {
+  background-size: 70%, 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 .rotate-90 {
   transform: rotate(90deg);
 }
