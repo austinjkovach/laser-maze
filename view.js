@@ -38,6 +38,8 @@ const generateTokenBank = tokens => {
       $token.setAttribute('rotation', t.rotation);
     }
 
+    if (t.active === 'active') $token.classList.add('token-active');
+
     /// Add token rotation
     $token.classList.add(`rotate-${c.rotation ? c.rotation * 90 : 0}`);
 
@@ -136,6 +138,8 @@ const createToken = cellData => {
     $token.setAttribute('draggable', true);
     $token.setAttribute('rotation', cellData.rotation);
   }
+
+  if (cellData.active) $token.classList.add('token-active');
 
   if (cellData !== 0)
     $token.classList.add(

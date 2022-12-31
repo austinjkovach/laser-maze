@@ -45,7 +45,11 @@ body {
 }
 
 .token-target {
-  background-image: url('./target.png');
+  background-image: url('./target-inactive.png');
+}
+
+.token-target.token-active {
+  background-image: url('./target-active.png');
 }
 
 .token-checkpoint {

@@ -16,10 +16,11 @@
 /// ✅) Draggable
 /// ✅) click to rotate newly placed pieces
 /// ✅) hard reset
-/// 11) correct target facings
-/// 12) localstorage to keep track of solved puzzles
+/// ✅) correct target facings
+/// ✅) active vs inactive target icon
 /// 13) lock/rotate icons
-/// 14) get token from drag info
+/// 14) localstorage to keep track of solved puzzles
+/// 15) get token from drag info
 
 ///////////
 // NOTES //
