@@ -23,60 +23,100 @@ body {
 }
 
 .cell {
-  background: white;
+  position: relative;
   height: 50px;
   width: 50px;
+
   border: 1px solid black;
+  background: white;
 }
 
-.cell:before {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+[class*='token-'] {
+  background-size: cover;
+  cursor: grab;
 
   height: 100%;
-  width: 100%;
 }
 
-[class*='token-']:before {
-  content: '';
-  background-size: cover;
+[class*='token-']:active {
+  cursor: grabbing;
 }
 
 .token-laser {
-  content: '🔒';
-}
-.token-laser:before {
   background-image: url('./laser.png');
 }
 
-.token-target:before {
-  background-image: url('./target.png');
+.token-target {
+  background-image: url('./target-inactive.png');
 }
 
-.token-checkpoint:before {
+.token-target.token-active {
+  background-image: url('./target-active.png');
+}
+
+.token-checkpoint {
   background-image: url('./checkpoint.png');
 }
 
-.token-beam-splitter:before {
+.token-beam-splitter {
   background-image: url('./beam-splitter.png');
 }
 
-.token-double-mirror:before {
+.token-double-mirror {
   background-image: url('./double-mirror.png');
 }
 
-.token-cell-blocker:before {
+.token-cell-blocker {
   background-image: url('./cell-blocker.png');
 }
 
-.rotate-90:before {
+.token-laser.token-can-rotate {
+  background-image: url('./rotate.png'), url('./laser.png');
+}
+
+.token-target.token-can-rotate {
+  background-image: url('./rotate.png'), url('./target-inactive.png');
+}
+
+.token-target.token-can-rotate.token-active {
+  background-image: url('./rotate.png'), url('./target-active.png');
+}
+.token-checkpoint.token-can-rotate {
+  background-image: url('./rotate.png'), url('./checkpoint.png');
+}
+
+.token-beam-splitter.token-can-rotate {
+  background-image: url('./rotate.png'), url('./beam-splitter.png');
+}
+
+.token-double-mirror.token-can-rotate {
+  background-image: url('./rotate.png'), url('./double-mirror.png');
+}
+
+.token-cell-blocker.token-can-rotate {
+  background-image: url('./rotate.png'), url('./cell-blocker.png');
+}
+
+.token-can-rotate {
+  position: absolute;
+  top: 0;
+  width: 100%;
+
+  background-image: url('./rotate.png');
+  background-size: 40%, 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  pointer-events: none;
+}
+
+.rotate-90 {
   transform: rotate(90deg);
 }
-.rotate-180:before {
+.rotate-180 {
   transform: rotate(180deg);
 }
-.rotate-270:before {
+.rotate-270 {
   transform: rotate(270deg);
 }
 
@@ -88,6 +128,10 @@ body {
 /* 🔒 */
 
 /* 🔄 */
+
+button {
+  cursor: pointer;
+}
 
 #levelSelect {
   display: flex;
@@ -105,3 +149,20 @@ body {
 #levelSelect button.active {
   background: lightgreen;
 }
+
+#tokenBank {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+
+  margin: 0 auto;
+  background: lightgray;
+  padding: 20px;
+  border-radius: 16px;
+}
+
+/* [class*='token-']:before {
+  content: '';
+  background-size: cover;
+  cursor: pointer;
+} */
