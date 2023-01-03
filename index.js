@@ -12,15 +12,16 @@
 /// -✅- update visited count correctly
 /// -✅- update score correctly (when laser is turned off, should go to 0)
 /// -✅- display newly placed lasers correctly (rotation)
-/// 8) Clean up moveToken logic - keep DRY
+/// 8) (NICE TO HAVE) Clean up moveToken logic - keep DRY
 /// ✅) Draggable
 /// ✅) click to rotate newly placed pieces
 /// ✅) hard reset
 /// ✅) correct target facings
 /// ✅) active vs inactive target icon
-/// 13) lock/rotate icons
+/// ✅) lock/rotate icons
 /// 14) localstorage to keep track of solved puzzles
-/// 15) get token from drag info
+/// 15) (NICE TO HAVE) get token from drag info
+/// 16) fix token rotation persists across board resets
 
 ///////////
 // NOTES //
@@ -83,7 +84,15 @@ const b = (rot, canRotate = false) => token('beam-splitter', rot, canRotate);
 const m = (rot, canRotate = false) => token('double-mirror', rot, canRotate);
 const x = () => token('cell-blocker');
 
-const deepClone = arr => [...arr.map(el => (Array.isArray(el) ? [...el] : el))];
+const deepClone = arr => [
+  ...arr.map(el =>
+    Array.isArray(el)
+      ? [...el.map(el => (el === 0 ? el : { ...el }))]
+      : el === 0
+      ? el
+      : { ...el }
+  ),
+];
 const deepEqual = (arr1, arr2) => arr1[0] === arr2[0] && arr1[1] === arr2[1];
 
 class Board {
@@ -98,7 +107,6 @@ class Board {
   }
 
   calculateScore() {
-    // TODO this needs to change with correct target behavior (only 1 face scores points)
     const newPoints = this.tokens.filter(
       t => t.type === 'target' && t.active
     ).length;
@@ -135,7 +143,8 @@ class Board {
 
   reset() {
     this.grid = this.getInitialBoard();
-    this.tokenBank = [...this.initialTokenBank.map(el => el)];
+    console.log('initialTOkkenBank', this.initialTokenBank);
+    this.tokenBank = [...this.initialTokenBank.map(el => ({ ...el }))];
     this.recalculateBoard();
   }
 

@@ -8,6 +8,7 @@ const generateTokenBank = tokens => {
   $tokenBank.innerHTML = '';
   $tokenBank.setAttribute('id', 'tokenBank');
   [...tokens].forEach((t, idx) => {
+    // const t = { ...tok };
     /// Set up cell
     const $cell = document.createElement('div');
     $cell.classList.add('cell');
@@ -39,7 +40,12 @@ const generateTokenBank = tokens => {
     }
 
     if (t.active === 'active') $token.classList.add('token-active');
-    if (t.canRotate) $token.classList.add('token-can-rotate');
+
+    if (t.canRotate) {
+      const $rotate = document.createElement('div');
+      $rotate.classList.add('token-can-rotate');
+      $cell.appendChild($rotate);
+    }
 
     /// Add token rotation
     $token.classList.add(`rotate-${c.rotation ? c.rotation * 90 : 0}`);
@@ -121,7 +127,7 @@ const createCell = (x, y) => {
   return $cell;
 };
 
-const createToken = cellData => {
+const createToken = t => {
   const $token = document.createElement('div');
   $token.classList.add('token');
   $token.addEventListener('dragstart', dragstart_handler);
@@ -130,23 +136,20 @@ const createToken = cellData => {
 
   // TODO??? Use CSS classes of rotate-[0-3] instead of rotate-[0-270]
 
-  const tokenClickHandler = () => handleClick(cellData, $token);
+  const tokenClickHandler = () => handleClick(t, $token);
   $token.addEventListener('click', tokenClickHandler);
 
-  if (cellData.type) {
-    $token.classList.add(`token-${cellData.type}`);
-    $token.setAttribute('data-type', cellData.type);
+  if (t.type) {
+    $token.classList.add(`token-${t.type}`);
+    $token.setAttribute('data-type', t.type);
     $token.setAttribute('draggable', true);
-    $token.setAttribute('rotation', cellData.rotation);
+    $token.setAttribute('rotation', t.rotation);
   }
 
-  if (cellData.active) $token.classList.add('token-active');
-  if (cellData.canRotate) $token.classList.add('token-can-rotate');
+  if (t.active) $token.classList.add('token-active');
 
-  if (cellData !== 0)
-    $token.classList.add(
-      `rotate-${cellData.rotation ? cellData.rotation * 90 : 0}`
-    );
+  if (t !== 0)
+    $token.classList.add(`rotate-${t.rotation ? t.rotation * 90 : 0}`);
 
   return $token;
 };
@@ -158,6 +161,14 @@ const generateCellsInRow = (row, rowIndex) => {
     const $token = createToken(c);
 
     $cell.appendChild($token);
+
+    if (c.canRotate) {
+      const $rotate = document.createElement('div');
+      $rotate.classList.add('token-can-rotate');
+
+      $cell.appendChild($rotate);
+    }
+
     return $cell;
   });
 };

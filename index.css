@@ -23,10 +23,12 @@ body {
 }
 
 .cell {
-  background: white;
+  position: relative;
   height: 50px;
   width: 50px;
+
   border: 1px solid black;
+  background: white;
 }
 
 [class*='token-'] {
@@ -73,9 +75,12 @@ body {
 }
 
 .token-target.token-can-rotate {
-  background-image: url('./rotate.png'), url('./target.png');
+  background-image: url('./rotate.png'), url('./target-inactive.png');
 }
 
+.token-target.token-can-rotate.token-active {
+  background-image: url('./rotate.png'), url('./target-active.png');
+}
 .token-checkpoint.token-can-rotate {
   background-image: url('./rotate.png'), url('./checkpoint.png');
 }
@@ -93,9 +98,16 @@ body {
 }
 
 .token-can-rotate {
-  background-size: 70%, 100%;
+  position: absolute;
+  top: 0;
+  width: 100%;
+
+  background-image: url('./rotate.png');
+  background-size: 40%, 100%;
   background-position: center;
   background-repeat: no-repeat;
+
+  pointer-events: none;
 }
 
 .rotate-90 {
