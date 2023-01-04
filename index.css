@@ -8,12 +8,14 @@ body {
 
 #board {
   min-width: 25px;
+  max-width: 300px;
   min-height: 25px;
-  margin: 0 auto;
-  max-width: 250px;
-  border-radius: 16px;
-  background: lightgray;
+
   padding: 20px;
+  margin: 0 auto;
+  border-radius: 16px;
+
+  background: lightgray;
 }
 
 .row {
@@ -24,21 +26,24 @@ body {
 
 .cell {
   position: relative;
-  height: 50px;
-  width: 50px;
+  height: 60px;
+  width: 60px;
 
   border: 1px solid black;
   background: white;
 }
 
 [class*='token-'] {
-  background-size: cover;
-  cursor: grab;
-
   height: 100%;
+  background-size: cover;
+  cursor: pointer;
 }
 
-[class*='token-']:active {
+.can-move {
+  cursor: grab;
+}
+
+.can-move:active {
   cursor: grabbing;
 }
 
@@ -70,44 +75,64 @@ body {
   background-image: url('./cell-blocker.png');
 }
 
-.token-laser.token-can-rotate {
-  background-image: url('./rotate.png'), url('./laser.png');
+.token {
+  position: relative;
 }
 
-.token-target.token-can-rotate {
-  background-image: url('./rotate.png'), url('./target-inactive.png');
-}
-
-.token-target.token-can-rotate.token-active {
-  background-image: url('./rotate.png'), url('./target-active.png');
-}
-.token-checkpoint.token-can-rotate {
-  background-image: url('./rotate.png'), url('./checkpoint.png');
-}
-
-.token-beam-splitter.token-can-rotate {
-  background-image: url('./rotate.png'), url('./beam-splitter.png');
-}
-
-.token-double-mirror.token-can-rotate {
-  background-image: url('./rotate.png'), url('./double-mirror.png');
-}
-
-.token-cell-blocker.token-can-rotate {
-  background-image: url('./rotate.png'), url('./cell-blocker.png');
-}
-
-.token-can-rotate {
-  position: absolute;
-  top: 0;
-  width: 100%;
-
-  background-image: url('./rotate.png');
-  background-size: 40%, 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-
+.icons {
   pointer-events: none;
+}
+
+.icons:not(.can-rotate):before {
+  content: '';
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 20px;
+  height: 20px;
+  background: url('./no-rotate.png') black;
+  background-size: 31px;
+  background-repeat: no-repeat;
+  background-position: -6px -5px;
+
+  border-radius: 20px;
+  font-size: 14px;
+  border: 1px solid white;
+
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.icons:not(.can-move):after {
+  content: '🔒';
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 18px;
+  height: 18px;
+  background: black;
+  border-radius: 18px;
+  font-size: 14px;
+  border: 1px solid white;
+
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.rotate-90::before {
+  transform: rotate(-90deg);
+}
+.rotate-180::before {
+  transform: rotate(-180deg);
+}
+.rotate-270::before {
+  transform: rotate(-270deg);
 }
 
 .rotate-90 {
@@ -160,9 +185,3 @@ button {
   padding: 20px;
   border-radius: 16px;
 }
-
-/* [class*='token-']:before {
-  content: '';
-  background-size: cover;
-  cursor: pointer;
-} */

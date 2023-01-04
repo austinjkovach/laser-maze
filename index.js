@@ -21,7 +21,7 @@
 /// ✅) lock/rotate icons
 /// 14) localstorage to keep track of solved puzzles
 /// 15) (NICE TO HAVE) get token from drag info
-/// 16) fix token rotation persists across board resets
+/// ✅) fix token rotation persists across board resets
 
 ///////////
 // NOTES //
@@ -48,11 +48,12 @@ const rotationMatrix = [
   }
 */
 
-const token = (type, rotation = 0, canRotate = false) => {
+const token = (type, rotation = 0, canRotate = false, canMove = false) => {
   const returnObj = {
     type,
     rotation,
     canRotate,
+    canMove,
     visited: type === 'cell-blocker', // cell-blockers do not need to be visited in order for a solution to be valid
   };
 
@@ -77,11 +78,16 @@ const isInBounds = (coords, board) => {
   return checkX && checkY;
 };
 
-const l = (rot, canRotate = false) => token('laser', rot, canRotate);
-const t = (rot, canRotate = false) => token('target', rot, canRotate);
-const c = (rot, canRotate = false) => token('checkpoint', rot, canRotate);
-const b = (rot, canRotate = false) => token('beam-splitter', rot, canRotate);
-const m = (rot, canRotate = false) => token('double-mirror', rot, canRotate);
+const l = (rot, canRotate = false, canMove = false) =>
+  token('laser', rot, canRotate, canMove);
+const t = (rot, canRotate = false, canMove = false) =>
+  token('target', rot, canRotate, canMove);
+const c = (rot, canRotate = false, canMove = false) =>
+  token('checkpoint', rot, canRotate, canMove);
+const b = (rot, canRotate = false, canMove = false) =>
+  token('beam-splitter', rot, canRotate, canMove);
+const m = (rot, canRotate = false, canMove = false) =>
+  token('double-mirror', rot, canRotate, canMove);
 const x = () => token('cell-blocker');
 
 const deepClone = arr => [
@@ -143,7 +149,6 @@ class Board {
 
   reset() {
     this.grid = this.getInitialBoard();
-    console.log('initialTOkkenBank', this.initialTokenBank);
     this.tokenBank = [...this.initialTokenBank.map(el => ({ ...el }))];
     this.recalculateBoard();
   }
