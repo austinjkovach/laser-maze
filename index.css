@@ -78,37 +78,12 @@ body {
 .token {
   position: relative;
 }
-/* .token:not(.can-rotate) {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-} */
 
-/* .token.can-rotate::before {
-  content: '🔒';
-  content: '🔄';
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  width: 20px;
-  height: 20px;
-  background: black;
-  border-radius: 20px;
-  border: 1px solid white;
-
-  position: absolute;
-  right: 0;
-  bottom: 0;
-} */
 .icons {
   pointer-events: none;
 }
 
 .icons:not(.can-rotate):before {
-  /* content: '🔄'; */
-  /* content: url('./no-rotate.png'); */
   content: '';
 
   display: flex;
@@ -158,46 +133,6 @@ body {
 }
 .rotate-270::before {
   transform: rotate(-270deg);
-}
-
-/* .token-laser.token-can-rotate {
-  background-image: url('./rotate.png'), url('./laser.png');
-}
-
-.token-target.token-can-rotate {
-  background-image: url('./rotate.png'), url('./target-inactive.png');
-}
-
-.token-target.token-can-rotate.token-active {
-  background-image: url('./rotate.png'), url('./target-active.png');
-}
-.token-checkpoint.token-can-rotate {
-  background-image: url('./rotate.png'), url('./checkpoint.png');
-}
-
-.token-beam-splitter.token-can-rotate {
-  background-image: url('./rotate.png'), url('./beam-splitter.png');
-}
-
-.token-double-mirror.token-can-rotate {
-  background-image: url('./rotate.png'), url('./double-mirror.png');
-}
-
-.token-cell-blocker.token-can-rotate {
-  background-image: url('./rotate.png'), url('./cell-blocker.png');
-} */
-
-.token-can-rotate {
-  position: absolute;
-  top: 0;
-  width: 100%;
-
-  /* background-image: url('./rotate.png');
-  background-size: 40%, 100%;
-  background-position: center;
-  background-repeat: no-repeat; */
-
-  pointer-events: none;
 }
 
 .rotate-90 {
@@ -250,9 +185,3 @@ button {
   padding: 20px;
   border-radius: 16px;
 }
-
-/* [class*='token-']:before {
-  content: '';
-  background-size: cover;
-  cursor: pointer;
-} */
