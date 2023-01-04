@@ -215,17 +215,24 @@ const levels = [
       [0, m(0, true), 0, 0, l(3, true)],
       [0, 0, 0, 0, 0],
     ],
-    tokenBank: [m(), l(), b(), t(), x(), c()],
+    tokenBank: [
+      m(0, true, true),
+      l(0, true, true),
+      b(0, true, true),
+      t(0, true, true),
+      x(0, true, true),
+      c(0, true, true),
+    ],
   },
   {
     grid: [
       [0, t(1, true), 0, 0, 0],
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
-      [0, m(0, true), 0, 0, l(3, true)],
+      [0, 0, m(0, true), 0, l(3, true)],
       [0, 0, 0, 0, 0],
     ],
-    tokenBank: [m(0, true)],
+    tokenBank: [m(0, true, true)],
   },
   {
     grid: [
@@ -268,12 +275,12 @@ const levels = [
       [x(), 0, 0, 0, l(3, true)],
     ],
     tokenBank: [
-      m(0, true),
-      l(0, true),
-      b(0, true),
-      t(0, true),
-      x(0, true),
-      c(0, true),
+      m(0, true, true),
+      l(0, true, true),
+      b(0, true, true),
+      t(0, true, true),
+      x(0, true, true),
+      c(0, true, true),
     ],
   },
 ];

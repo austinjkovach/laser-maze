@@ -8,7 +8,6 @@ const generateTokenBank = tokens => {
   $tokenBank.innerHTML = '';
   $tokenBank.setAttribute('id', 'tokenBank');
   [...tokens].forEach((t, idx) => {
-    // const t = { ...tok };
     /// Set up cell
     const $cell = document.createElement('div');
     $cell.classList.add('cell');
@@ -21,37 +20,11 @@ const generateTokenBank = tokens => {
     /// If no token, append to DOM and return early
     if (t === 0) return $tokenBank.appendChild($cell);
 
-    /// Set up token
-    const $token = document.createElement('div');
-    $token.classList.add('token');
-    $token.addEventListener('dragstart', dragstart_handler);
-
-    $token.setAttribute('id', `token-${idx}`);
-
-    const tokenClickHandler = () => handleClick(t, $token);
-    $token.addEventListener('click', tokenClickHandler);
-
-    /// Add class based on token
-    if (t.type) {
-      $token.classList.add(`token-${t.type}`);
-      $token.setAttribute('data-type', t.type);
-      $token.setAttribute('draggable', true);
-      $token.setAttribute('rotation', t.rotation);
-    }
-
-    if (t.active === 'active') $token.classList.add('token-active');
-
-    if (t.canRotate) {
-      const $rotate = document.createElement('div');
-      $rotate.classList.add('token-can-rotate');
-      $cell.appendChild($rotate);
-    }
-
-    /// Add token rotation
-    $token.classList.add(`rotate-${c.rotation ? c.rotation * 90 : 0}`);
+    const [$token, $icons] = createToken(t);
 
     /// Append nodes to DOM
     $cell.appendChild($token);
+    $cell.appendChild($icons);
     $tokenBank.appendChild($cell);
   });
 
@@ -132,8 +105,6 @@ const createToken = t => {
   $token.classList.add('token');
   $token.addEventListener('dragstart', dragstart_handler);
 
-  $token.setAttribute('draggable', false);
-
   // TODO??? Use CSS classes of rotate-[0-3] instead of rotate-[0-270]
 
   const tokenClickHandler = () => handleClick(t, $token);
@@ -142,31 +113,33 @@ const createToken = t => {
   if (t.type) {
     $token.classList.add(`token-${t.type}`);
     $token.setAttribute('data-type', t.type);
-    $token.setAttribute('draggable', true);
+    $token.setAttribute('draggable', t.canMove);
     $token.setAttribute('rotation', t.rotation);
   }
 
-  if (t.active) $token.classList.add('token-active');
+  const $icons = document.createElement('div');
+  $icons.classList.add('icons');
+  if (t.canMove) $icons.classList.add('can-move');
+  if (t.canRotate) $icons.classList.add('can-rotate');
 
+  if (t.active) $token.classList.add('token-active');
   if (t !== 0)
     $token.classList.add(`rotate-${t.rotation ? t.rotation * 90 : 0}`);
 
-  return $token;
+  return [$token, $icons];
 };
 
 const generateCellsInRow = (row, rowIndex) => {
   return row.map((c, j) => {
     const $cell = createCell(j, rowIndex);
     if (!c.type) return $cell;
-    const $token = createToken(c);
+    const [$token, $icons] = createToken(c);
 
     $cell.appendChild($token);
+    $cell.appendChild($icons);
 
     if (c.canRotate) {
-      const $rotate = document.createElement('div');
-      $rotate.classList.add('token-can-rotate');
-
-      $cell.appendChild($rotate);
+      $token.classList.add('can-rotate');
     }
 
     return $cell;
