@@ -1,10 +1,13 @@
 const $board = document.querySelector('#board');
+const $description = document.querySelector('#description');
+
 const generateTokenBank = tokens => {
   let $tokenBank = document.querySelector('#tokenBank');
   if (!$tokenBank) {
     $tokenBank = document.createElement('div');
-    document.body.appendChild($tokenBank);
+    document.querySelector('#boardContainer').appendChild($tokenBank);
   }
+
   $tokenBank.innerHTML = '';
   $tokenBank.setAttribute('id', 'tokenBank');
   [...tokens].forEach((t, idx) => {
@@ -189,7 +192,10 @@ const renderScore = board => {
 };
 
 const render = async board => {
+  /// TODO add level check into render method somewhere
+
   $board.innerHTML = '';
+  $description.innerText = board.description || '';
   generateRows(board.grid);
   generateTokenBank(board.tokenBank);
 
