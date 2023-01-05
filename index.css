@@ -165,14 +165,38 @@ button {
 }
 
 #levelSelect button {
-  border: none;
+  position: relative;
   width: 40px;
   height: 40px;
   margin: 3px;
+  border: 3px solid transparent;
+}
+
+#levelSelect button.disabled {
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+}
+
+#levelSelect button.complete {
+  background: lightgreen;
 }
 
 #levelSelect button.active {
-  background: lightgreen;
+  border: 3px solid black;
+}
+
+#levelSelect button.disabled:before {
+  content: '🔒';
+  position: absolute;
+  left: -3px;
+  bottom: -3px;
+}
+
+#levelSelect button.complete:before {
+  content: '✅';
+  position: absolute;
+  left: 0;
+  bottom: -3px;
 }
 
 #tokenBank {

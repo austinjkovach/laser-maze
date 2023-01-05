@@ -22,6 +22,7 @@
 /// 14) localstorage to keep track of solved puzzles
 /// 15) (NICE TO HAVE) get token from drag info
 /// ✅) fix token rotation persists across board resets
+/// 17) add description to levels
 
 ///////////
 // NOTES //
@@ -102,14 +103,16 @@ const deepClone = arr => [
 const deepEqual = (arr1, arr2) => arr1[0] === arr2[0] && arr1[1] === arr2[1];
 
 class Board {
-  constructor(grid, tokenBank = []) {
+  constructor(grid, tokenBank = [], boardId, targetPoints = 1) {
     this.grid = deepClone(grid);
     this.laser = null;
     this.tokens = grid.flat().filter(n => n !== 0);
     this.points = 0;
+    this.targetPoints = targetPoints;
     this.initialBoard = deepClone(grid);
     this.initialTokenBank = deepClone(tokenBank);
     this.tokenBank = deepClone(tokenBank); // should this be an object of token types?
+    this.boardId = boardId;
   }
 
   calculateScore() {
@@ -184,6 +187,9 @@ class Board {
     }
   }
 
+  isSolved = () =>
+    this.allTokensAreVisited() && this.points == this.targetPoints;
+
   calculateAll(laser, print = false) {
     // BFS
     let queue = [laser.head];
@@ -197,6 +203,14 @@ class Board {
     }
     this.calculateScore();
     this.calculateVisited();
+
+    console.log('boardId', this.boardId);
+    if (this.isSolved()) {
+      /// pass to localStorage
+      console.log('isSolved', this.boardId);
+      localStorage.setItem(this.boardId, true);
+    }
+
     if (print) this.printLaser();
   }
 

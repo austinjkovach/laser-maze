@@ -189,6 +189,8 @@ const renderScore = board => {
 };
 
 const render = async board => {
+  /// TODO add level check into render method somewhere
+
   $board.innerHTML = '';
   generateRows(board.grid);
   generateTokenBank(board.tokenBank);
