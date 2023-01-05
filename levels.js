@@ -1,10 +1,20 @@
 /*
 
+TUTORIAL LEVELS
+
   click the button
   hit the target
+  click to rotate
+  drag to place
   locked pieces
-  rotate pieces
+  no-rotate pieces
+
+  checkpoint
+  double-mirror
+  beam-splitter
+  cell-blocker
 */
+
 const levels = [
   {
     grid: [

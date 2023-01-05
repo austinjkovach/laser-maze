@@ -5,15 +5,19 @@
   </head>
   <body>
     <div id="levelSelect"></div>
-    <button id="resetAllLevels">RESET ALL PROGRESS</button>
-    <button id="debug">debug</button>
+    <div class="debug-container">
+      <button id="resetAllLevels">RESET ALL PROGRESS</button>
+      <button id="debug">debug</button>
+    </div>
+    <p id="description"></p>
     <div id="boardContainer">
       <div id="board"><div class="cell"></div></div>
     </div>
-    <p id="description"></p>
     <div id="score"></div>
     <div id="visited"></div>
-    <button id="initLaser">LASER</button>
+    <div class="btn-container">
+      <button id="initLaser">LASER</button>
+    </div>
     <script src="./index.js"></script>
     <script src="./view.js"></script>
     <script src="./levels.js"></script>
