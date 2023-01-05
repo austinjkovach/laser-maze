@@ -103,7 +103,7 @@ const deepClone = arr => [
 const deepEqual = (arr1, arr2) => arr1[0] === arr2[0] && arr1[1] === arr2[1];
 
 class Board {
-  constructor(grid, tokenBank = [], boardId, targetPoints = 1) {
+  constructor(grid, tokenBank = [], targetPoints = 1, description, boardId) {
     this.grid = deepClone(grid);
     this.laser = null;
     this.tokens = grid.flat().filter(n => n !== 0);
@@ -113,6 +113,7 @@ class Board {
     this.initialTokenBank = deepClone(tokenBank);
     this.tokenBank = deepClone(tokenBank); // should this be an object of token types?
     this.boardId = boardId;
+    this.description = description;
   }
 
   calculateScore() {

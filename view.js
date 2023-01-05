@@ -1,4 +1,6 @@
 const $board = document.querySelector('#board');
+const $description = document.querySelector('#description');
+
 const generateTokenBank = tokens => {
   let $tokenBank = document.querySelector('#tokenBank');
   if (!$tokenBank) {
@@ -192,6 +194,7 @@ const render = async board => {
   /// TODO add level check into render method somewhere
 
   $board.innerHTML = '';
+  $description.innerText = board.description || '';
   generateRows(board.grid);
   generateTokenBank(board.tokenBank);
 
