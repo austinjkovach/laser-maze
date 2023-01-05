@@ -5,8 +5,9 @@ const generateTokenBank = tokens => {
   let $tokenBank = document.querySelector('#tokenBank');
   if (!$tokenBank) {
     $tokenBank = document.createElement('div');
-    document.body.appendChild($tokenBank);
+    document.querySelector('#boardContainer').appendChild($tokenBank);
   }
+
   $tokenBank.innerHTML = '';
   $tokenBank.setAttribute('id', 'tokenBank');
   [...tokens].forEach((t, idx) => {

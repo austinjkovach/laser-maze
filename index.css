@@ -4,6 +4,13 @@ body {
   align-items: center;
   flex-direction: column;
   gap: 25px;
+
+  background: #71afdf;
+}
+
+#boardContainer {
+  display: flex;
+  flex-direction: column;
 }
 
 #board {
@@ -204,8 +211,40 @@ button {
   flex-direction: row;
   gap: 16px;
 
-  margin: 0 auto;
+  margin: 10px auto;
   background: lightgray;
   padding: 20px;
   border-radius: 16px;
+}
+
+/* https://codepen.io/dodozhang21/pen/ANpyyL */
+#initLaser {
+  --baseColor: rgb(229, 48, 48);
+  --red: rgb(229, 48, 48);
+  --diameter: 300px;
+
+  background: var(--baseColor);
+  margin: 0 10px;
+  border: 7px solid #fff;
+  border-radius: 100%;
+  box-shadow: 0 -2px 0 3px rgba(229, 48, 48, 1) inset,
+    0 5px 5px rgba(229, 48, 48, 0.7), 0 15px rgba(255, 255, 255, 0.25) inset;
+  cursor: pointer;
+  display: inline-block;
+  height: var(--diameter);
+  width: var(--diameter);
+  color: white;
+}
+
+#initLaser:hover {
+  --baseColor: rgb(229, 48, 48);
+  --red: rgb(167, 47, 47);
+
+  background: var(--red);
+  box-shadow: 0 -2px 0 3px var(--red) inset, 0 5px 5px rgba(229, 48, 48, 0.7),
+    0 15px rgba(236, 173, 173, 0.25) inset;
+}
+
+#initLaser:active {
+  margin-top: 3px;
 }

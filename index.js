@@ -205,10 +205,7 @@ class Board {
     this.calculateScore();
     this.calculateVisited();
 
-    console.log('boardId', this.boardId);
     if (this.isSolved()) {
-      /// pass to localStorage
-      console.log('isSolved', this.boardId);
       localStorage.setItem(this.boardId, true);
     }
 

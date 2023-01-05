@@ -1,3 +1,10 @@
+/*
+
+  click the button
+  hit the target
+  locked pieces
+  rotate pieces
+*/
 const levels = [
   {
     grid: [
@@ -16,7 +23,7 @@ const levels = [
     ],
     tokenBank: [],
     targetPoints: 1,
-    description: '',
+    description: 'Look, now you have to rotate it',
   },
   {
     grid: [

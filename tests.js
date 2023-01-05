@@ -9,12 +9,9 @@ const checkLevelUnlocks = lvls => {
     $levelBtn.classList.remove('disabled');
     $levelBtn.removeAttribute('disabled');
 
-    console.log('UNLOCK', i, localStorage.getItem(i - 1));
-
     if (localStorage.getItem(i)) $levelBtn.classList.add('complete');
 
     if (!localStorage.getItem(i - 1) && i !== 0) {
-      console.log('YES');
       $levelBtn.classList.add('disabled');
       $levelBtn.setAttribute('disabled', true);
     }
@@ -51,7 +48,6 @@ const setLevelSelect = lvls => {
 
     document.querySelector('#levelSelect').appendChild($levelBtn);
   });
-  console.log('1');
   checkLevelUnlocks(lvls);
 };
 
@@ -104,7 +100,6 @@ if (localStorage.getItem('debug')) {
         activeBoard.tokens.filter(t => t.type === 'target').length
       );
       render(activeBoard);
-      console.log('2');
       checkLevelUnlocks(testLevels);
     }
   });
@@ -114,7 +109,6 @@ if (localStorage.getItem('debug')) {
     if (activeBoard) {
       activeBoard.initLaser();
       render(activeBoard);
-      console.log('3');
       checkLevelUnlocks(levels);
       render(activeBoard);
     }
