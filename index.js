@@ -79,15 +79,13 @@ const isInBounds = (coords, board) => {
   return checkX && checkY;
 };
 
-const l = (rot, canRotate = false, canMove = false) =>
-  token('laser', rot, canRotate, canMove);
-const t = (rot, canRotate = false, canMove = false) =>
-  token('target', rot, canRotate, canMove);
-const c = (rot, canRotate = false, canMove = false) =>
+const l = (rot, canRotate, canMove) => token('laser', rot, canRotate, canMove);
+const t = (rot, canRotate, canMove) => token('target', rot, canRotate, canMove);
+const c = (rot, canRotate, canMove) =>
   token('checkpoint', rot, canRotate, canMove);
-const b = (rot, canRotate = false, canMove = false) =>
+const b = (rot, canRotate, canMove) =>
   token('beam-splitter', rot, canRotate, canMove);
-const m = (rot, canRotate = false, canMove = false) =>
+const m = (rot, canRotate, canMove) =>
   token('double-mirror', rot, canRotate, canMove);
 const x = () => token('cell-blocker');
 
@@ -192,6 +190,7 @@ class Board {
     this.allTokensAreVisited() && this.points == this.targetPoints;
 
   calculateAll(laser, print = false) {
+    if (!laser) return;
     // BFS
     let queue = [laser.head];
     let curr;

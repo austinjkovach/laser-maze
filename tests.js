@@ -64,6 +64,8 @@ const setActiveButton = el => {
 const $resetAllLevels = document.querySelector('#resetAllLevels');
 $resetAllLevels.addEventListener('click', () => {
   localStorage.clear();
+  checkLevelUnlocks(levels);
+  checkLevelUnlocks(testLevels);
 });
 
 //////////////////
@@ -74,6 +76,8 @@ $debug.addEventListener('click', () => {
   for (let i = 0; i < 30; i++) {
     localStorage.setItem(i, true);
   }
+  checkLevelUnlocks(levels);
+  checkLevelUnlocks(testLevels);
 });
 
 /////////////
