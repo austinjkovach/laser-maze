@@ -10,7 +10,9 @@ body {
 
 #boardContainer {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+
+  position: relative;
 }
 
 #board {
@@ -181,6 +183,8 @@ button {
   height: 40px;
   margin: 3px;
   border: 3px solid transparent;
+
+  box-shadow: 2px 2px 3px black;
 }
 
 #levelSelect button.disabled {
@@ -215,10 +219,15 @@ button {
   flex-direction: row;
   gap: 16px;
 
-  margin: 10px auto;
-  background: lightgray;
+  position: absolute;
+  top: 25%;
+  right: calc(-50% - 10px);
+
+  margin: auto 10px;
   padding: 20px;
   border-radius: 16px;
+
+  background: lightgray;
   box-shadow: 5px 5px 5px black;
 }
 
