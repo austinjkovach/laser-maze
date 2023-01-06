@@ -18,6 +18,15 @@ TUTORIAL LEVELS
 const levels = [
   {
     grid: [
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, l(), 0],
+    ],
+    targetPoints: 0,
+    description: 'Click the button to activate the laser',
+  },
+  {
+    grid: [
       [0, l(2), 0],
       [0, 0, 0],
       [0, t(), 0],
@@ -43,7 +52,7 @@ const levels = [
     ],
     tokenBank: [l(0, true, true)],
     targetPoints: 1,
-    description: 'Use the token bank',
+    description: 'Drag a token from the bank onto the board',
   },
   {
     grid: [
