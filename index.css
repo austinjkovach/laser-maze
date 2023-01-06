@@ -171,6 +171,18 @@ button {
   cursor: pointer;
 }
 
+#description {
+  min-width: 25px;
+  max-width: 300px;
+  min-height: 25px;
+  padding: 20px;
+  margin: 0 auto;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 5px 5px 5px black;
+  line-height: 25px;
+}
+
 #levelSelect {
   display: flex;
   flex-wrap: wrap;
