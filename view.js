@@ -210,7 +210,7 @@ const render = async board => {
         addBorderToCell(curr.coords);
         queue.push(...curr.children);
       }
-      await new Promise(r => setTimeout(r, 0)); // [1]
+      await new Promise(r => setTimeout(r, 5)); // [1]
     }
   }
 };
