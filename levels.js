@@ -92,19 +92,6 @@ const levels = [
   },
   {
     grid: [
-      [0, t(1), 0, c(1), m(0)],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-    ],
-    tokenBank: [l(0, true, true)],
-    targetPoints: 1,
-    description:
-      'Beam Splitters split the laser in two, allowing it to pass through as well as reflect at an angle',
-  },
-  {
-    grid: [
       [0, m(1), 0, 0, t(3)],
       [0, 0, 0, 0, 0],
       [0, b(1), 0, 0, t(3)],
