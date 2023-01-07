@@ -22,7 +22,8 @@
 /// 14) localstorage to keep track of solved puzzles
 /// 15) (NICE TO HAVE) get token from drag info
 /// ✅) fix token rotation persists across board resets
-/// 17) add description to levels
+/// ✅) add description to levels
+/// 18) level 7  - move away from edges, set mirror up in wrong direction, need to rotate to win
 
 ///////////
 // NOTES //

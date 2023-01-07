@@ -69,9 +69,11 @@ const levels = [
   },
   {
     grid: [
-      [0, t(2, false, false), 0],
-      [0, c(0), 0],
-      [l(0, true, true), 0, 0],
+      [0, t(2, false, false), 0, 0, 0],
+      [0, c(1, true, false), 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, c(0, true, false), 0, 0, 0],
+      [0, l(0), 0, 0, 0],
     ],
     tokenBank: [],
     targetPoints: 1,
@@ -80,21 +82,22 @@ const levels = [
   },
   {
     grid: [
-      [0, t(1), 0, c(1), m(0)],
+      [0, 0, 0, 0, 0],
+      [t(1), 0, m(1, true, false), 0, 0],
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
+      [0, 0, l(0, true, false), 0, 0],
     ],
-    tokenBank: [l(0, true, true)],
+    tokenBank: [],
     targetPoints: 1,
-    description: 'Mirrors reflect the laser at a 90-degree angle',
+    description:
+      'Mirrors reflect the laser at a 90-degree angle based on their rotation',
   },
   {
     grid: [
       [0, m(1), 0, 0, t(3)],
       [0, 0, 0, 0, 0],
-      [0, b(1), 0, 0, t(3)],
+      [0, b(0, true), 0, 0, t(3)],
       [0, 0, 0, 0, 0],
       [0, l(0), 0, 0, 0],
     ],
