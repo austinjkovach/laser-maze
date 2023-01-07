@@ -3,10 +3,10 @@ const $description = document.querySelector('#description');
 
 const generateTokenBank = tokens => {
   let $tokenBank = document.querySelector('#tokenBank');
-  if (!$tokenBank) {
-    $tokenBank = document.createElement('div');
-    document.querySelector('#boardContainer').appendChild($tokenBank);
-  }
+  // if (!$tokenBank) {
+  //   $tokenBank = document.createElement('div');
+  //   document.querySelector('#boardContainer').appendChild($tokenBank);
+  // }
 
   $tokenBank.innerHTML = '';
   $tokenBank.setAttribute('id', 'tokenBank');
@@ -31,7 +31,7 @@ const generateTokenBank = tokens => {
     $tokenBank.appendChild($cell);
   });
 
-  if (!$tokenBank.children.length) $tokenBank.remove();
+  // if (!$tokenBank.children.length) $tokenBank.remove();
 };
 
 function dragstart_handler(e) {
@@ -172,26 +172,45 @@ const addBorderToCell = coords => {
   targetCell && targetCell.classList.add('laser-active');
 };
 
-const renderTargetScore = board => {
+const renderTargetScore = (board, fromLaser) => {
   const $score = document.querySelector('#score');
-  $score.innerHTML = 'Score: ' + board.points;
+  $score.innerHTML = `${board.points} of ${board.targetPoints}`;
+
+  const $scoreWrapper = document.querySelector('.score-wrapper');
+  $scoreWrapper.classList.remove('active');
+  $scoreWrapper.classList.remove('error');
+  if (!fromLaser) return;
+  if (board.points === board.targetPoints) {
+    $scoreWrapper.classList.add('active');
+  } else {
+    $scoreWrapper.classList.add('error');
+  }
 };
 
-const renderVisitedScore = board => {
+const renderVisitedScore = (board, fromLaser) => {
   const $visited = document.querySelector('#visited');
   const visited = board.calculateVisited();
   const total = board
     .calculateTokens()
     .filter(t => t.type !== 'cell-blocker').length;
   $visited.innerHTML = `${visited} / ${total}`;
+
+  $visited.classList.remove('active');
+  $visited.classList.remove('error');
+  if (!fromLaser) return;
+  if (visited === total) {
+    $visited.classList.add('active');
+  } else {
+    $visited.classList.add('error');
+  }
 };
 
-const renderScore = board => {
-  renderTargetScore(board);
-  renderVisitedScore(board);
+const renderScore = (board, fromLaser) => {
+  renderTargetScore(board, fromLaser);
+  renderVisitedScore(board, fromLaser);
 };
 
-const render = async board => {
+const render = async (board, fromLaser) => {
   /// TODO add level check into render method somewhere
 
   $board.innerHTML = '';
@@ -199,7 +218,7 @@ const render = async board => {
   generateRows(board.grid);
   generateTokenBank(board.tokenBank);
 
-  renderScore(board);
+  renderScore(board, fromLaser);
   if (board.laser) {
     let curr;
     let queue = [board.laser.head];

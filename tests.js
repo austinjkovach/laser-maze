@@ -103,7 +103,7 @@ if (localStorage.getItem('debug')) {
         activeBoard.points,
         activeBoard.tokens.filter(t => t.type === 'target').length
       );
-      render(activeBoard);
+      render(activeBoard, true);
       checkLevelUnlocks(testLevels);
     }
   });
@@ -114,7 +114,7 @@ if (localStorage.getItem('debug')) {
       activeBoard.initLaser();
       render(activeBoard);
       checkLevelUnlocks(levels);
-      render(activeBoard);
+      render(activeBoard, true);
     }
   });
 }
