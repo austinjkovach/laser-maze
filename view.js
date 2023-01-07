@@ -169,7 +169,7 @@ const addBorderToCell = coords => {
   const targetCell = document.querySelector(
     `.row:nth-of-type(${y + 1}) .cell:nth-of-type(${x + 1})`
   );
-  targetCell && targetCell.classList.add('border');
+  targetCell && targetCell.classList.add('laser-active');
 };
 
 const renderTargetScore = board => {
@@ -210,7 +210,7 @@ const render = async board => {
         addBorderToCell(curr.coords);
         queue.push(...curr.children);
       }
-      await new Promise(r => setTimeout(r, 0)); // [1]
+      await new Promise(r => setTimeout(r, 5)); // [1]
     }
   }
 };

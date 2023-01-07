@@ -4,13 +4,20 @@
     <link rel="stylesheet" href="./index.css" />
   </head>
   <body>
+    <link rel="prefetch" href="./laser.png" />
+    <link rel="prefetch" href="./target-active.png" />
+    <link rel="prefetch" href="./target-inactive.png" />
+    <link rel="prefetch" href="./checkpoint.png" />
+    <link rel="prefetch" href="./beam-splitter.png" />
+    <link rel="prefetch" href="./double-mirror.png" />
+    <link rel="prefetch" href="./cell-blocker.png" />
     <div id="levelSelect"></div>
     <div class="debug-container">
       <button id="resetAllLevels">RESET ALL PROGRESS</button>
       <button id="debug">debug</button>
     </div>
     <p id="description">Select a level to begin playing</p>
-    <div id="boardContainer">
+    <div id="boardContainer" class="border">
       <div id="board">
         <div class="row">
           <div class="cell"></div>
@@ -29,7 +36,7 @@
         </div>
       </div>
     </div>
-    <div id="score"></div>
+    <div id="score" class="border"></div>
     <div id="visited"></div>
     <div class="btn-container">
       <button id="initLaser">LASER</button>
