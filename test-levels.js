@@ -282,4 +282,15 @@ const testLevels = [
       c(0, true, true),
     ],
   },
+
+  {
+    grid: [
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [t(0), 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, l(3, true, true)],
+    ],
+    tokenBank: [c(0, true, true)],
+  },
 ];
