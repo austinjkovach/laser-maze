@@ -19,8 +19,15 @@
       <button id="debug">debug</button>
     </div>
     <p id="description">Select a level to begin playing</p>
-    <div id="boardContainer" class="border">
-      <div id="board">
+    <div id="boardContainer">
+      <div class="score-container">
+        <div class="border score-wrapper">
+          <div>🎯</div>
+          <span id="score"></span>
+        </div>
+        <div id="visited" class="border"></div>
+      </div>
+      <div id="board" class="border">
         <div class="row">
           <div class="cell"></div>
           <div class="cell"></div>
@@ -37,9 +44,8 @@
           <div class="cell"></div>
         </div>
       </div>
+      <div id="tokenBank" class="border"></div>
     </div>
-    <div id="score" class="border"></div>
-    <div id="visited"></div>
     <div class="btn-container">
       <button id="initLaser">LASER</button>
     </div>

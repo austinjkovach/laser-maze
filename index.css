@@ -21,13 +21,29 @@ body {
   min-height: 25px;
 }
 
-.border {
+.border:not(:empty) {
   padding: 20px;
-  margin: 0 auto;
+  margin: auto 10px;
   border-radius: 16px;
 
   background: lightgray;
   box-shadow: 5px 5px 5px black;
+}
+.score-container {
+  position: absolute;
+  left: -110px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.score-container > * {
+  height: 50px;
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .row {
@@ -234,15 +250,64 @@ button {
   gap: 16px;
 
   position: absolute;
-  top: 25%;
-  right: calc(-50% - 10px);
+  right: -120px;
 
-  margin: auto 10px;
-  padding: 20px;
-  border-radius: 16px;
+  /* margin: auto 10px; */
+  /* padding: 20px;
+  border-radius: 16px; */
 
-  background: lightgray;
-  box-shadow: 5px 5px 5px black;
+  /* background: lightgray;
+  box-shadow: 5px 5px 5px black; */
+}
+
+.score-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.score-wrapper.active,
+#visited.active {
+  background: lightgreen;
+  animation: success-bump 300ms;
+}
+
+.score-wrapper.error,
+#visited.error {
+  background: lightcoral;
+  animation: shake 300ms;
+}
+
+@keyframes success-bump {
+  0% {
+    transform: scale(100%);
+  }
+  50% {
+    transform: scale(125%);
+  }
+  100% {
+    transform: scale(100%);
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-5px);
+  }
+  40% {
+    transform: translate(5px);
+  }
+  60% {
+    transform: translate(-5px);
+  }
+  80% {
+    transform: translate(5px);
+  }
+  100% {
+    transform: translate(0);
+  }
 }
 
 /* https://codepen.io/dodozhang21/pen/ANpyyL */
