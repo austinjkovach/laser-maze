@@ -174,9 +174,16 @@ const addBorderToCell = coords => {
 
 const renderTargetScore = (board, fromLaser) => {
   const $score = document.querySelector('#score');
-  $score.innerHTML = `${board.points} of ${board.targetPoints}`;
 
   const $scoreWrapper = document.querySelector('.score-wrapper');
+  $scoreWrapper.innerHTML = '';
+
+  for (let i = 0; i < board.targetPoints; i++) {
+    const $div = document.createElement('div');
+    if (i < board.points) $div.classList.add('activated');
+    $scoreWrapper.appendChild($div);
+  }
+
   $scoreWrapper.classList.remove('active');
   $scoreWrapper.classList.remove('error');
   if (!fromLaser) return;
@@ -193,7 +200,18 @@ const renderVisitedScore = (board, fromLaser) => {
   const total = board
     .calculateTokens()
     .filter(t => t.type !== 'cell-blocker').length;
-  $visited.innerHTML = `${visited} / ${total}`;
+
+  let arr = [];
+  for (let i = 0; i < visited; i++) {
+    arr.push('🟩');
+  }
+  for (let i = 0; i < total - visited; i++) {
+    arr.push('🟥');
+  }
+
+  const string = arr.join(' ');
+
+  $visited.innerHTML = string;
 
   $visited.classList.remove('active');
   $visited.classList.remove('error');

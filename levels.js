@@ -24,7 +24,7 @@ const levels = [
     ],
     targetPoints: 1,
     description:
-      "Click the button to activate the laser! Shoot the laser at the target's light to activate it",
+      "Click the button to fire the laser! Shoot the laser at the target's light to activate it",
   },
   {
     grid: [
@@ -118,5 +118,18 @@ const levels = [
     targetPoints: 1,
     description:
       'Cell Blockers: lasers can pass through, but other tokens cannot. Cell Blockers do not need to be touched in order to beat a level',
+  },
+  {
+    grid: [
+      [0, 0, 0, 0, 0],
+      [m(1), 0, 0, m(1, true), 0],
+      [c(), 0, 0, m(1, true), 0],
+      [0, 0, 0, 0, 0],
+      [m(), x(), t(3), 0, 0],
+    ],
+    tokenBank: [l(0, true, true), t(0, true, true)],
+    targetPoints: 1,
+    description:
+      'Targets can also be used as mirrors. You do not need to activate all targets.',
   },
 ];
