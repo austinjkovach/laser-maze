@@ -19,11 +19,11 @@
 /// ✅) correct target facings
 /// ✅) active vs inactive target icon
 /// ✅) lock/rotate icons
-/// 14) localstorage to keep track of solved puzzles
+/// ✅) localstorage to keep track of solved puzzles
 /// 15) (NICE TO HAVE) get token from drag info
 /// ✅) fix token rotation persists across board resets
 /// ✅) add description to levels
-/// 18) level 7  - move away from edges, set mirror up in wrong direction, need to rotate to win
+/// ✅) level 7  - move away from edges, set mirror up in wrong direction, need to rotate to win
 
 ///////////
 // NOTES //
