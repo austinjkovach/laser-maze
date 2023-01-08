@@ -421,7 +421,8 @@ class Board {
       case 'checkpoint':
         // Based on rotation // 0, 2 == N/S, 1, 3 == E/W
         if (!(rotation % 2)) {
-          // N/S if (mask[0]) return null;
+          // N/S
+          if (directionMask[0]) return null;
           return [applyMask(coords, directionMask)];
         } else {
           // E/W
